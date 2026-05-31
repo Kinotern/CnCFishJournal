@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Cast n Chill - Fish Journal</title>
+<style>
+@font-face{font-family:zpix;src:url(zpix.ttf) format("truetype")}
+*{margin:0;padding:0;box-sizing:border-box}
+img{-webkit-user-drag:none;user-select:none}
+body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:zpix,"Courier New",monospace;image-rendering:pixelated}
+.book-wrapper{position:relative;transform:scale(2);transform-origin:center center}
+.book-bg{width:516px;height:432px;position:relative;z-index:0}
+.book-bg>img{position:absolute;top:0;left:0;width:100%;height:100%}
+.overlay{position:absolute;top:0;left:0;width:100%;height:100%}
+.fish-panel{position:absolute;left:114px;top:133px;width:126px;height:74px;overflow:hidden}
+.fish-panel .panel-bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0}
+.fish-name{position:absolute;left:50%;top:2px;transform:translateX(-50%);color:#3b2f1a;font-size:7px;text-align:center;width:96px;line-height:8px;white-space:nowrap;z-index:2}
+.big-fish-img{position:absolute;left:50%;top:15px;transform:translateX(-50%);width:96px;height:56px;object-fit:contain;z-index:1;image-rendering:pixelated}
+.rarity-text{position:absolute;left:80px;top:64px;width:42px;height:7px;font-size:5px;line-height:7px;z-index:2;text-align:center}
+.text-container{position:absolute;left:112px;top:211px;width:145px;height:88px;color:#3b2f1a;font-size:6px;line-height:9px}
+.gear-row{display:flex;align-items:center;gap:2px;margin-bottom:4px;white-space:nowrap}
+.gear-row img{object-fit:contain;image-rendering:pixelated}
+#detailRodIcon{width:28px;height:8px;object-position:center}
+#detailLureIcon{width:11px;height:11px}
+.gear-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gear-name.rod{max-width:47px}
+.gear-name.lure{max-width:48px}
+.gear-sep{color:#6b5a3e;margin:0 1px}
+.detail-row{display:flex;align-items:flex-start;margin-bottom:1px}
+.detail-row .label{color:#6b5a3e;width:26px;flex:0 0 26px}
+.detail-row span:last-child{flex:1;min-width:0}
+.right-page{position:absolute;left:258px;top:124px;width:192px;height:184px}
+.sort-label{position:absolute;right:32px;top:0;font-size:7px;color:#6b5a3e}
+.sort-btn{position:absolute;right:8px;top:0;cursor:pointer;font-size:7px;color:#3b2f1a;background:#9a775f;padding:1px 3px}
+.scroll-area{position:absolute;left:9px;top:10px;right:8px;bottom:0;overflow-y:auto;overflow-x:hidden}
+.scroll-area::-webkit-scrollbar{width:6px}
+.scroll-area::-webkit-scrollbar-track{background:transparent}
+.scroll-area::-webkit-scrollbar-thumb{background:#8b7355;border-radius:3px}
+.fish-group{margin-bottom:5px}
+.fish-group-header{color:#a85f35;font-size:6px;margin-bottom:2px;padding-left:2px;white-space:nowrap;display:flex;align-items:center;gap:4px}
+.fish-group-header .loc-icon{width:8px;height:8px;object-fit:contain;image-rendering:pixelated}
+.fish-group-header .spot{color:#3b2f1a;margin-left:7px}
+.fish-grid{display:flex;flex-wrap:wrap;gap:6px;padding-left:2px}
+.fish-thumb{width:24.5px;height:22.54px;position:relative;cursor:pointer}
+.fish-thumb .thumb-bg{position:absolute;top:0;left:0;width:24.5px;height:22.54px;z-index:0}
+.fish-thumb .thumb-img{position:absolute;top:1.96px;left:1.96px;width:19.6px;height:19.6px;object-fit:contain;image-rendering:pixelated;z-index:1}
+.fish-thumb .thumb-selector{display:none;position:absolute;top:-0.98px;left:-0.98px;width:26.46px;height:23.52px;z-index:2;pointer-events:none}
+.fish-thumb.selected .thumb-selector{display:block}
+.sort-popup-bg{display:none;position:absolute;top:0;left:0;width:516px;height:432px;background:rgba(0,0,0,0.3);z-index:50}
+.sort-popup{position:absolute;top:50%;left:60%;transform:translate(-60%,-70%);z-index:51}
+.sort-popup>img{width:94px;height:105px}
+.sort-options{position:absolute;top:30px;left:7px;right:7px}
+.sort-option{padding:2px 4px;cursor:pointer;font-size:6px;color:#b8833f;text-align:center;text-shadow:1px 1px 0 #20131a}
+.sort-option:hover{background:#5a352d;color:#f0c06a}
+.sort-reverse{position:absolute;top:12px;left:50%;transform:translateX(-50%);cursor:pointer}
+.sort-reverse img{width:12px;height:11px}
+.lang-toggle{position:fixed;top:10px;right:10px;z-index:100}
+.lang-toggle button{background:#4a3728;color:#c0b080;border:1px solid #6b5a3e;padding:4px 8px;cursor:pointer;font-family:inherit;font-size:10px}
+</style>
+</head>
+<body>
+<div class="lang-toggle"><button onclick="toggleLang()" id="langBtn">EN</button></div>
+<div class="book-wrapper">
+  <div class="book-bg">
+    <img src="sprites/Book_BG.png" alt="Book">
+    <div class="overlay">
+      <div class="fish-panel">
+        <img class="panel-bg" id="fishPanelBg" src="sprites/book_fishpanel.png" alt="">
+        <div class="fish-name" id="fishName">请选择一条鱼</div>
+        <img class="big-fish-img" id="bigFishImg" src="" alt="" style="display:none">
+        <div class="rarity-text" id="rarityText"></div>
+      </div>
+      <div class="text-container">
+        <div class="gear-row">
+          <span class="gear-name rod" id="detailRod">-</span>
+          <img id="detailRodIcon" src="sprites/book_icon_rod.png" alt="">
+          <span class="gear-sep">|</span>
+          <img id="detailLureIcon" src="sprites/book_icon_lure.png" alt="">
+          <span class="gear-name lure" id="detailLure">-</span>
+        </div>
+        <div class="detail-row"><span class="label" data-label="spot">钓点:</span> <span id="detailSpot">-</span></div>
+        <div class="detail-row"><span class="label" data-label="area">区域:</span> <span id="detailArea">-</span></div>
+        <div class="detail-row"><span class="label" data-label="size">尺寸:</span> <span id="detailSize">-</span></div>
+        <div class="detail-row"><span class="label" data-label="length">长度:</span> <span id="detailLength">-</span></div>
+        <div class="detail-row"><span class="label" data-label="weight">重量:</span> <span id="detailWeight">-</span></div>
+      </div>
+      <div class="right-page">
+        <div class="sort-label" id="sortLabel">排序依据</div>
+        <div class="sort-btn" onclick="toggleSort()" id="sortBtn">钓场</div>
+        <div class="scroll-area" id="fishGrid"></div>
+      </div>
+    </div>
+  </div>
+  <div class="sort-popup-bg" id="sortPopupBg" onclick="toggleSort()">
+    <div class="sort-popup" onclick="event.stopPropagation()">
+      <img src="sprites/Book_Sort_Panel.png" alt="">
+      <div class="sort-reverse"><img src="sprites/Book_Sort_Reverse_Order.png" alt=""></div>
+      <div class="sort-options">
+        <div class="sort-option" data-sort-label="game" onclick="sortBy('game')">钓场</div>
+        <div class="sort-option" data-sort-label="name" onclick="sortBy('name')">名称</div>
+        <div class="sort-option" data-sort-label="rarity" onclick="sortBy('rarity')">稀有度</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="fishdata.js"></script>
+<script>
+var lang="zh",selectedEntry=null,sortMode="game";
+var LABEL_TEXT={zh:{spot:"钓点:",area:"区域:",size:"尺寸:",length:"长度:",weight:"重量:"},en:{spot:"Spot:",area:"Area:",size:"Size:",length:"Length:",weight:"Weight:"}};
+var SORT_TEXT={zh:{label:"排序依据",game:"钓场",name:"名称",rarity:"稀有度",all:"全部鱼类"},en:{label:"Sort by",game:"Spot",name:"Name",rarity:"Rarity",all:"All Fish"}};
+var RARITY_ORDER={Common:0,Uncommon:1,Rare:2,Epic:3,Legendary:4};
+var RARITY_COLOR={Common:"#5d5138",Uncommon:"#4f7a3f",Rare:"#3f6f8f",Epic:"#7b5792",Legendary:"#a56b2d"};
+
+function fishById(id){for(var i=0;i<FISH_DATA.length;i++){if(FISH_DATA[i].id===id)return FISH_DATA[i]}return null}
+function firstGroupForFish(id){for(var i=0;i<LOCATION_GROUPS.length;i++){if(LOCATION_GROUPS[i].fish.indexOf(id)!==-1)return LOCATION_GROUPS[i]}return null}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]})}
+function asset(rel){return "sprites/"+rel}
+function padTier(t){var n=Math.max(1,Math.min(5,Number(t)||1));return "0"+n}
+function thumbBg(fish,group){var p=padTier(fish.sizeTier);return group&&group.ice?"book_thumb_found_ice_"+p+".png":"Book_Thumb_Found_"+p+".png"}
+function groupTitle(group){
+  var area=lang==="zh"?group.areaZh:group.area;
+  var spot=lang==="zh"?group.spotZh:group.spot;
+  return "<img class=\"loc-icon\" src=\"sprites/book_icon_foundlocation.png\" alt=\"\"><span>"+area+"</span><span class=\"spot\">"+spot+"</span>";
+}
+function updateLabels(){var labels=document.querySelectorAll(".text-container .label");for(var i=0;i<labels.length;i++){var key=labels[i].getAttribute("data-label");labels[i].textContent=LABEL_TEXT[lang][key]}}
+function updateSortText(){
+  document.getElementById("sortLabel").textContent=SORT_TEXT[lang].label;
+  document.getElementById("sortBtn").textContent=SORT_TEXT[lang][sortMode];
+  var opts=document.querySelectorAll(".sort-option");
+  for(var i=0;i<opts.length;i++){opts[i].textContent=SORT_TEXT[lang][opts[i].getAttribute("data-sort-label")]}
+}
+function toggleLang(){
+  lang=lang==="zh"?"en":"zh";
+  document.getElementById("langBtn").textContent=lang==="zh"?"EN":"ZH";
+  updateLabels();
+  updateSortText();
+  if(selectedEntry)selectFish(selectedEntry.fish,selectedEntry.group,false);
+  else document.getElementById("fishName").textContent=lang==="zh"?"请选择一条鱼":"Select a fish";
+  renderGrid();
+}
+function toggleSort(){var p=document.getElementById("sortPopupBg");p.style.display=p.style.display==="block"?"none":"block"}
+function sortBy(m){sortMode=m;updateSortText();toggleSort();renderGrid()}
+function selectFish(fish,group,rerender){
+  selectedEntry={fish:fish,group:group};
+  document.getElementById("fishName").textContent=lang==="zh"?fish.zh:fish.en;
+  var rarity=document.getElementById("rarityText");
+  rarity.textContent=lang==="zh"?fish.rarityZh:fish.rarity;
+  rarity.style.color=RARITY_COLOR[fish.rarity]||"#5d5138";
+  var big=document.getElementById("bigFishImg");
+  big.src=asset(fish.sprite);
+  big.style.display="block";
+  document.getElementById("fishPanelBg").src=asset(group&&group.ice?"book_fishpanel_ice.png":"book_fishpanel.png");
+  document.getElementById("detailRod").textContent=lang==="zh"?fish.rodZh:fish.rod;
+  document.getElementById("detailRodIcon").src=asset(fish.rodIcon);
+  document.getElementById("detailLure").textContent=lang==="zh"?fish.lureZh:fish.lure;
+  document.getElementById("detailLureIcon").src=asset(fish.lureIcon);
+  document.getElementById("detailSpot").textContent=group?(lang==="zh"?group.spotZh:group.spot):"-";
+  document.getElementById("detailArea").textContent=group?(lang==="zh"?group.areaZh:group.area):"-";
+  var sizeText=lang==="zh"?fish.sizeZh:fish.size;
+  var lengthText=lang==="zh"?fish.lengthZh:fish.length;
+  var weightText=lang==="zh"?fish.weightZh:fish.weight;
+  document.getElementById("detailSize").textContent=sizeText;
+  document.getElementById("detailLength").textContent=lengthText;
+  document.getElementById("detailWeight").textContent=weightText;
+  if(rerender!==false)renderGrid();
+}
+function locationEntries(){
+  var out=[];
+  for(var i=0;i<LOCATION_GROUPS.length;i++){
+    var group=LOCATION_GROUPS[i];
+    for(var j=0;j<group.fish.length;j++){
+      var fish=fishById(group.fish[j]);
+      if(fish)out.push({fish:fish,group:group,groupKey:group.id,groupName:groupTitle(group),order:i*100+j});
+    }
+  }
+  return out;
+}
+function singleFishEntries(){
+  var out=[];
+  for(var i=0;i<FISH_DATA.length;i++){
+    var fish=FISH_DATA[i];
+    var group=firstGroupForFish(fish.id);
+    out.push({fish:fish,group:group,groupKey:"all",groupName:SORT_TEXT[lang].all,order:fish.order});
+  }
+  return out;
+}
+function renderGrid(){
+  var g=document.getElementById("fishGrid");
+  if(typeof FISH_DATA==="undefined"||typeof LOCATION_GROUPS==="undefined"||!FISH_DATA.length){g.innerHTML="Loading...";return}
+  var entries=sortMode==="game"?locationEntries():singleFishEntries();
+  if(sortMode==="name"){
+    entries.sort(function(a,b){return(lang==="zh"?a.fish.zh.localeCompare(b.fish.zh,"zh"):a.fish.en.localeCompare(b.fish.en))||a.fish.order-b.fish.order});
+  }else if(sortMode==="rarity"){
+    entries.sort(function(a,b){return(RARITY_ORDER[a.fish.rarity]||0)-(RARITY_ORDER[b.fish.rarity]||0)||a.fish.order-b.fish.order});
+  }else{
+    entries.sort(function(a,b){return a.order-b.order});
+  }
+  var html="",current="";
+  for(var i=0;i<entries.length;i++){
+    var e=entries[i],fish=e.fish,group=e.group;
+    if(e.groupKey!==current){
+      if(current)html+="</div></div>";
+      current=e.groupKey;
+      html+="<div class=\"fish-group\"><div class=\"fish-group-header\">"+e.groupName+"</div><div class=\"fish-grid\">";
+    }
+    var selected=selectedEntry&&selectedEntry.fish.id===fish.id&&selectedEntry.group&&group&&selectedEntry.group.id===group.id;
+    html+="<div class=\"fish-thumb"+(selected?" selected":"")+"\" data-fish=\""+esc(fish.id)+"\" data-group=\""+esc(group?group.id:"")+"\">";
+    html+="<img class=\"thumb-bg\" src=\"sprites/"+thumbBg(fish,group)+"\" alt=\"\">";
+    html+="<img class=\"thumb-img\" src=\""+asset(fish.thumb)+"\" alt=\"\">";
+    html+="<img class=\"thumb-selector\" src=\"sprites/Book_Thumb_Selector.png\" alt=\"\">";
+    html+="</div>";
+  }
+  if(current)html+="</div></div>";
+  g.innerHTML=html;
+  var nodes=g.querySelectorAll(".fish-thumb");
+  for(var j=0;j<nodes.length;j++){
+    nodes[j].onclick=function(){
+      var fish=fishById(this.getAttribute("data-fish"));
+      var gid=this.getAttribute("data-group");
+      var group=null;
+      for(var k=0;k<LOCATION_GROUPS.length;k++){if(LOCATION_GROUPS[k].id===gid){group=LOCATION_GROUPS[k];break}}
+      if(fish)selectFish(fish,group);
+    };
+  }
+}
+updateLabels();
+updateSortText();
+document.addEventListener("dragstart",function(e){if(e.target&&e.target.tagName==="IMG")e.preventDefault()});
+renderGrid();
+</script>
+</body>
+</html>
