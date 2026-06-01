@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Cast n Chill - Panel Align Debug</title>
+<style>
+@font-face{font-family:zpix;src:url(zpix.ttf) format("truetype")}
+*{box-sizing:border-box}
+body{margin:0;background:#17151f;color:#eadfbd;font-family:zpix,"Courier New",monospace;font-size:14px}
+button,select,input,textarea{font-family:inherit}
+.app{display:grid;grid-template-columns:1fr 420px;gap:16px;min-height:100vh;padding:16px}
+.preview-wrap{display:flex;align-items:flex-start;justify-content:center;overflow:auto;background:#201923;border:1px solid #52435b;padding:20px}
+.preview-scale{position:relative;width:516px;height:432px;transform:scale(3);transform-origin:top center;margin-bottom:864px}
+.book-bg>img{position:absolute;top:0;left:0;width:516px;height:432px}
+.fish-panel{position:absolute;left:114px;top:133px;width:126px;height:74px;overflow:hidden}
+.fish-panel .panel-bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0}
+.fish-name{position:absolute;left:50%;top:1px;transform:translateX(-50%);color:#3b2f1a;font-size:7px;text-align:center;width:96px;height:10px;line-height:8px;white-space:nowrap;z-index:2;display:flex;align-items:center;justify-content:center}
+.big-fish-img{position:absolute;left:50%;top:15px;transform:translateX(-50%);width:96px;height:56px;object-fit:contain;z-index:1;image-rendering:pixelated}
+.rarity-text{position:absolute;left:80px;top:63px;width:42px;height:8px;font-size:5px;line-height:7px;z-index:2;text-align:center;display:flex;align-items:center;justify-content:center}
+.fish-size-icons{position:absolute;left:3px;top:64px;height:7px;display:flex;align-items:center;gap:1px;z-index:2}
+.fish-size-icons img{object-fit:contain;image-rendering:pixelated}
+.fish-size-icons .trophy-icon{margin-left:1px}
+.controls{position:sticky;top:16px;align-self:start;background:#211c28;border:1px solid #52435b;padding:12px}
+.controls h1{font-size:16px;font-weight:400;color:#f2c36d;margin:0 0 12px}
+.row{display:grid;grid-template-columns:120px 1fr 62px;gap:8px;align-items:center;margin-bottom:8px}
+.row label{font-size:12px;color:#d4c39b}
+.row input[type=range]{width:100%}
+.row input[type=number]{width:62px;background:#15121a;color:#f4e2bb;border:1px solid #5f5058;padding:4px}
+.fish-select{display:flex;gap:8px;margin-bottom:12px}
+.fish-select select{flex:1;background:#3a3044;color:#f5dfaa;border:1px solid #735a57;padding:6px}
+.fish-select button,.copy-btn{background:#4c3d3d;color:#f5dfaa;border:1px solid #80624e;padding:7px 10px;cursor:pointer}
+textarea{width:100%;height:190px;background:#15121a;color:#f4e2bb;border:1px solid #5f5058;padding:10px;font-size:12px;line-height:18px;resize:vertical}
+.hint{font-size:12px;line-height:18px;color:#c5b99d;margin:8px 0 10px}
+</style>
+</head>
+<body>
+<div class="app">
+  <main class="preview-wrap">
+    <div class="preview-scale">
+      <div class="book-bg"><img src="sprites/Book_BG.png" alt=""></div>
+      <div class="fish-panel">
+        <img class="panel-bg" id="fishPanelBg" src="sprites/book_fishpanel.png" alt="">
+        <div class="fish-name" id="fishName"></div>
+        <img class="big-fish-img" id="bigFishImg" src="" alt="">
+        <div class="fish-size-icons" id="fishSizeIcons"></div>
+        <div class="rarity-text" id="rarityText"></div>
+      </div>
+    </div>
+  </main>
+  <aside class="controls">
+    <h1>鱼面板对齐 Debug</h1>
+    <div class="fish-select">
+      <select id="fishSelect"></select>
+      <button id="resetBtn" type="button">重置</button>
+    </div>
+    <div id="rows"></div>
+    <div class="hint">调到满意后复制下面 CSS 参数给我，我按这些值改回 <code>fish_journal.html</code>。</div>
+    <button class="copy-btn" id="copyBtn" type="button">复制参数</button>
+    <textarea id="output" spellcheck="false"></textarea>
+  </aside>
+</div>
+<script src="fishdata.js"></script>
+<script>
+var values={
+  nameTop:1,nameWidth:96,nameHeight:10,nameFont:7,nameLine:8,
+  rarityLeft:80,rarityTop:63,rarityWidth:42,rarityHeight:8,rarityFont:5,rarityLine:7,
+  sizeLeft:3,sizeTop:64,sizeGap:1,bigTop:15,bigWidth:96,bigHeight:56
+};
+var ranges={
+  nameTop:[-4,8],nameWidth:[70,120],nameHeight:[6,16],nameFont:[4,10],nameLine:[5,12],
+  rarityLeft:[68,92],rarityTop:[58,70],rarityWidth:[28,52],rarityHeight:[5,12],rarityFont:[4,8],rarityLine:[5,10],
+  sizeLeft:[-2,14],sizeTop:[58,70],sizeGap:[0,5],bigTop:[10,22],bigWidth:[80,112],bigHeight:[48,64]
+};
+var labels={
+  nameTop:"鱼名 top",nameWidth:"鱼名 width",nameHeight:"鱼名 height",nameFont:"鱼名字号",nameLine:"鱼名行高",
+  rarityLeft:"稀有度 left",rarityTop:"稀有度 top",rarityWidth:"稀有度 width",rarityHeight:"稀有度 height",rarityFont:"稀有度字号",rarityLine:"稀有度行高",
+  sizeLeft:"尺寸图标 left",sizeTop:"尺寸图标 top",sizeGap:"尺寸图标 gap",bigTop:"鱼图 top",bigWidth:"鱼图 width",bigHeight:"鱼图 height"
+};
+var RARITY_COLOR={Common:"#5d5138",Uncommon:"#4f7a3f",Rare:"#3f6f8f",Epic:"#7b5792",Legendary:"#a56b2d"};
+var SIZE_ICON={S:"game/size/s.png",M:"game/size/m.png",L:"game/size/l.png",XL:"game/size/xl.png",XXL:"game/size/xxxl.png"};
+var TROPHY_ICON={normal:"game/trophy/trophy.png",legendary:"game/trophy/legendary.png"};
+function asset(rel){return "sprites/"+rel}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]})}
+function renderSizeIcons(fish){
+  var sizes=String(fish.size||"").split("/").map(function(v){return v.trim()}).filter(Boolean);
+  var html="";
+  for(var i=0;i<sizes.length;i++){if(SIZE_ICON[sizes[i]])html+="<img src=\""+asset(SIZE_ICON[sizes[i]])+"\" alt=\"\">"}
+  html+="<img class=\"trophy-icon\" src=\""+asset(TROPHY_ICON[fish.trophyType]||TROPHY_ICON.normal)+"\" alt=\"\">";
+  return html;
+}
+function renderFishSelect(){
+  var html="";
+  for(var i=0;i<FISH_DATA.length;i++){
+    var fish=FISH_DATA[i];
+    html+='<option value="'+esc(fish.id)+'">'+esc((fish.zh||fish.en)+" - "+fish.id)+'</option>';
+  }
+  document.getElementById("fishSelect").innerHTML=html;
+}
+function fishById(id){for(var i=0;i<FISH_DATA.length;i++){if(FISH_DATA[i].id===id)return FISH_DATA[i]}return FISH_DATA[0]}
+function renderRows(){
+  var html="";
+  for(var key in values){
+    html+='<div class="row"><label for="'+key+'">'+labels[key]+'</label><input id="'+key+'" data-key="'+key+'" type="range" min="'+ranges[key][0]+'" max="'+ranges[key][1]+'" step="0.1" value="'+values[key]+'"><input data-key="'+key+'" type="number" step="0.1" value="'+values[key]+'"></div>';
+  }
+  document.getElementById("rows").innerHTML=html;
+  var inputs=document.querySelectorAll("[data-key]");
+  for(var i=0;i<inputs.length;i++){
+    inputs[i].addEventListener("input",function(){
+      values[this.getAttribute("data-key")]=Number(this.value);
+      syncInputs();
+      applyValues();
+    });
+  }
+}
+function syncInputs(){
+  var inputs=document.querySelectorAll("[data-key]");
+  for(var i=0;i<inputs.length;i++)inputs[i].value=values[inputs[i].getAttribute("data-key")];
+}
+function applyValues(){
+  var fish=fishById(document.getElementById("fishSelect").value);
+  var name=document.getElementById("fishName");
+  var rarity=document.getElementById("rarityText");
+  var icons=document.getElementById("fishSizeIcons");
+  var big=document.getElementById("bigFishImg");
+  name.textContent=fish.zh||fish.en;
+  rarity.textContent=fish.rarityZh||fish.rarity;
+  rarity.style.color=RARITY_COLOR[fish.rarity]||"#5d5138";
+  icons.innerHTML=renderSizeIcons(fish);
+  big.src=asset(fish.sprite);
+  name.style.top=values.nameTop+"px";name.style.width=values.nameWidth+"px";name.style.height=values.nameHeight+"px";name.style.fontSize=values.nameFont+"px";name.style.lineHeight=values.nameLine+"px";
+  rarity.style.left=values.rarityLeft+"px";rarity.style.top=values.rarityTop+"px";rarity.style.width=values.rarityWidth+"px";rarity.style.height=values.rarityHeight+"px";rarity.style.fontSize=values.rarityFont+"px";rarity.style.lineHeight=values.rarityLine+"px";
+  icons.style.left=values.sizeLeft+"px";icons.style.top=values.sizeTop+"px";icons.style.gap=values.sizeGap+"px";
+  big.style.top=values.bigTop+"px";big.style.width=values.bigWidth+"px";big.style.height=values.bigHeight+"px";
+  updateOutput();
+}
+function updateOutput(){
+  document.getElementById("output").value=[
+    ".fish-name{top:"+values.nameTop+"px;width:"+values.nameWidth+"px;height:"+values.nameHeight+"px;font-size:"+values.nameFont+"px;line-height:"+values.nameLine+"px}",
+    ".big-fish-img{top:"+values.bigTop+"px;width:"+values.bigWidth+"px;height:"+values.bigHeight+"px}",
+    ".rarity-text{left:"+values.rarityLeft+"px;top:"+values.rarityTop+"px;width:"+values.rarityWidth+"px;height:"+values.rarityHeight+"px;font-size:"+values.rarityFont+"px;line-height:"+values.rarityLine+"px}",
+    ".fish-size-icons{left:"+values.sizeLeft+"px;top:"+values.sizeTop+"px;gap:"+values.sizeGap+"px}"
+  ].join("\n");
+}
+document.getElementById("fishSelect").addEventListener("change",applyValues);
+document.getElementById("resetBtn").addEventListener("click",function(){values={nameTop:1,nameWidth:96,nameHeight:10,nameFont:7,nameLine:8,rarityLeft:80,rarityTop:63,rarityWidth:42,rarityHeight:8,rarityFont:5,rarityLine:7,sizeLeft:3,sizeTop:64,sizeGap:1,bigTop:15,bigWidth:96,bigHeight:56};syncInputs();applyValues()});
+document.getElementById("copyBtn").addEventListener("click",function(){var out=document.getElementById("output");out.focus();out.select();navigator.clipboard.writeText(out.value).catch(function(){document.execCommand("copy")})});
+renderFishSelect();
+renderRows();
+applyValues();
+</script>
+</body>
+</html>

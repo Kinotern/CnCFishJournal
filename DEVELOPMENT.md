@@ -88,6 +88,7 @@ fish_journal.html
 - `sprites/thumbs/`：鱼类缩略图。
 - `sprites/game/rods/cropped/`：裁剪后的钓竿图标。原图顶部多余一行已裁掉，只保留完整鱼竿。
 - `sprites/game/lures/`：钓饵图标。
+- `sprites/game/time/`：从游戏 `core_assets_all.bundle` 导出的时间图标，包括 `time.png`、`timeday.png`、`timedawn.png`、`timedusk.png`、`timenight.png`。
 - `sprites/Book_*.png` 和 `sprites/book_*.png`：书本 UI、缩略框、排序菜单等界面素材。
 
 清理 PNG 时必须同时考虑：
@@ -101,11 +102,17 @@ fish_journal.html
   - `book_fishpanel_ice.png`
   - `Book_Thumb_Selector.png`
   - `book_icon_foundlocation.png`
+  - `game/time/time.png`
+  - `game/time/timeday.png`
+  - `game/time/timedawn.png`
+  - `game/time/timedusk.png`
+  - `game/time/timenight.png`
 
 ## UI 注意事项
 - 中文空状态应为 `请选择一条鱼`。
-- 详情标签使用：`钓点`、`区域`、`尺寸`、`长度`、`重量`。
+- 详情标签使用：`钓点`、`区域`、`时间`、`尺寸`、`长度`、`重量`。
 - 尺寸、长度、重量必须拆开显示，不要合并成一行。
+- 当前 `FishData` 资源里没有直接序列化每条鱼的精确 `timesOfDay` 字段；页面已支持 `timeIcons`、`timeZh`、`time` 字段，缺省显示 `全天 / All day`。如果后续从其他资源定位到精确时段，直接补到 `fishdata.js` 即可。
 - 右页按地点槽位展示，同一条鱼允许出现在多个地点。
 - 排序弹窗层级要高于右上角排序标签，否则会被覆盖。
 - 所有图片应禁止拖拽，避免用户拖动鱼图标或背景图。
@@ -118,7 +125,7 @@ fish_journal.html
 - 中文和英文切换正常。
 - 排序菜单打开时不会被右上角排序标签盖住。
 - 排序选项文字在深色背景上可读。
-- 选中鱼后左页详情图、稀有度、钓竿、钓饵、地点、尺寸、长度、重量正常显示。
+- 选中鱼后左页详情图、稀有度、钓竿、钓饵、地点、时间、尺寸、长度、重量正常显示。
 - 右页每组鱼按游戏地点顺序显示。
 - 图片不能被浏览器拖动。
 - `sprites/` 中没有未使用 PNG，也没有缺失引用。

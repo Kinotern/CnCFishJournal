@@ -7,16 +7,22 @@
 @font-face{font-family:zpix;src:url(zpix.ttf) format("truetype")}
 *{margin:0;padding:0;box-sizing:border-box}
 img{-webkit-user-drag:none;user-select:none}
-body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:zpix,"Courier New",monospace;image-rendering:pixelated}
-.book-wrapper{position:relative;transform:scale(2);transform-origin:center center}
+html{scroll-behavior:auto}
+body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;min-width:2064px;min-height:1728px;font-family:zpix,"Courier New",monospace;image-rendering:pixelated;visibility:hidden}
+body.ready{visibility:visible}
+.book-wrapper{position:relative;width:2064px;height:1728px}
+.book-bg{transform:scale(4);transform-origin:top left}
 .book-bg{width:516px;height:432px;position:relative;z-index:0}
 .book-bg>img{position:absolute;top:0;left:0;width:100%;height:100%}
 .overlay{position:absolute;top:0;left:0;width:100%;height:100%}
 .fish-panel{position:absolute;left:114px;top:133px;width:126px;height:74px;overflow:hidden}
 .fish-panel .panel-bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0}
-.fish-name{position:absolute;left:50%;top:2px;transform:translateX(-50%);color:#3b2f1a;font-size:7px;text-align:center;width:96px;line-height:8px;white-space:nowrap;z-index:2}
+.fish-name{position:absolute;left:50%;top:1px;transform:translateX(-50%);color:#3b2f1a;font-size:7px;text-align:center;width:96px;height:10px;line-height:8px;white-space:nowrap;z-index:2;display:flex;align-items:center;justify-content:center}
 .big-fish-img{position:absolute;left:50%;top:15px;transform:translateX(-50%);width:96px;height:56px;object-fit:contain;z-index:1;image-rendering:pixelated}
-.rarity-text{position:absolute;left:80px;top:64px;width:42px;height:7px;font-size:5px;line-height:7px;z-index:2;text-align:center}
+.rarity-text{position:absolute;left:81px;top:63.7px;width:42px;height:8px;font-size:5px;line-height:7px;z-index:2;text-align:center;display:flex;align-items:center;justify-content:center}
+.fish-size-icons{position:absolute;left:3px;top:64px;height:7px;display:flex;align-items:center;gap:1px;z-index:2}
+.fish-size-icons img{object-fit:contain;image-rendering:pixelated}
+.fish-size-icons .trophy-icon{margin-left:1px}
 .text-container{position:absolute;left:112px;top:211px;width:145px;height:88px;color:#3b2f1a;font-size:6px;line-height:9px}
 .gear-row{display:flex;align-items:center;gap:2px;margin-bottom:4px;white-space:nowrap}
 .gear-row img{object-fit:contain;image-rendering:pixelated}
@@ -26,16 +32,26 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;m
 .gear-name.rod{max-width:47px}
 .gear-name.lure{max-width:48px}
 .gear-sep{color:#6b5a3e;margin:0 1px}
-.detail-row{display:flex;align-items:flex-start;margin-bottom:1px}
+.detail-row{display:flex;align-items:flex-start;margin-bottom:2px}
 .detail-row .label{color:#6b5a3e;width:26px;flex:0 0 26px}
+.detail-row.time-row{align-items:center;margin-bottom:2px}
+.detail-row .time-label{width:26px;flex-basis:26px;line-height:8px}
+.detail-row .time-colon{color:#6b5a3e;width:6px;flex:0 0 6px;line-height:16px;text-align:center}
 .detail-row span:last-child{flex:1;min-width:0}
+.time-value{display:flex;align-items:center;gap:2px;min-height:8px;line-height:8px}
+.time-value img{width:7px;height:7px;object-fit:contain;image-rendering:pixelated}
 .right-page{position:absolute;left:258px;top:124px;width:192px;height:184px}
 .sort-label{position:absolute;right:32px;top:0;font-size:7px;color:#6b5a3e}
 .sort-btn{position:absolute;right:8px;top:0;cursor:pointer;font-size:7px;color:#3b2f1a;background:#9a775f;padding:1px 3px}
-.scroll-area{position:absolute;left:9px;top:10px;right:8px;bottom:0;overflow-y:auto;overflow-x:hidden}
-.scroll-area::-webkit-scrollbar{width:6px}
-.scroll-area::-webkit-scrollbar-track{background:transparent}
-.scroll-area::-webkit-scrollbar-thumb{background:#8b7355;border-radius:3px}
+.scroll-area{position:absolute;left:9px;top:10px;right:14px;bottom:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.scroll-area::-webkit-scrollbar{width:0;height:0}
+.book-scrollbar{position:absolute;top:15px;right:4px;width:8px;bottom:6px;z-index:4;display:none}
+.book-scrollbar.visible{display:block}
+.book-scrollbar-track{position:absolute;top:0;left:3px;width:2px;height:100%;background:#9c8761}
+.book-scrollbar-thumb{position:absolute;left:0;width:8px;min-height:24px;background:#8c7651;border:1px solid #6f5a3f;cursor:pointer}
+.book-scrollbar-thumb:before,.book-scrollbar-thumb:after{content:"";position:absolute;left:1px;right:1px;height:1px;background:#b7a57d}
+.book-scrollbar-thumb:before{top:3px}
+.book-scrollbar-thumb:after{bottom:3px}
 .fish-group{margin-bottom:5px}
 .fish-group-header{color:#a85f35;font-size:6px;margin-bottom:2px;padding-left:2px;white-space:nowrap;display:flex;align-items:center;gap:4px}
 .fish-group-header .loc-icon{width:8px;height:8px;object-fit:contain;image-rendering:pixelated}
@@ -46,7 +62,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;m
 .fish-thumb .thumb-img{position:absolute;top:1.96px;left:1.96px;width:19.6px;height:19.6px;object-fit:contain;image-rendering:pixelated;z-index:1}
 .fish-thumb .thumb-selector{display:none;position:absolute;top:-0.98px;left:-0.98px;width:26.46px;height:23.52px;z-index:2;pointer-events:none}
 .fish-thumb.selected .thumb-selector{display:block}
-.sort-popup-bg{display:none;position:absolute;top:0;left:0;width:516px;height:432px;background:rgba(0,0,0,0.3);z-index:50}
+.sort-popup-bg{display:none;position:absolute;top:0;left:0;width:516px;height:432px;background:rgba(0,0,0,0.3);z-index:50;transform:scale(4);transform-origin:top left}
 .sort-popup{position:absolute;top:50%;left:60%;transform:translate(-60%,-70%);z-index:51}
 .sort-popup>img{width:94px;height:105px}
 .sort-options{position:absolute;top:30px;left:7px;right:7px}
@@ -54,8 +70,9 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;m
 .sort-option:hover{background:#5a352d;color:#f0c06a}
 .sort-reverse{position:absolute;top:12px;left:50%;transform:translateX(-50%);cursor:pointer}
 .sort-reverse img{width:12px;height:11px}
-.lang-toggle{position:fixed;top:10px;right:10px;z-index:100}
-.lang-toggle button{background:#4a3728;color:#c0b080;border:1px solid #6b5a3e;padding:4px 8px;cursor:pointer;font-family:inherit;font-size:10px}
+.lang-toggle{position:fixed;top:16px;right:16px;z-index:100}
+.lang-toggle button{min-width:64px;height:32px;background:#4a3728;color:#e8cf8d;border:2px solid #8f7046;padding:0 10px;cursor:pointer;font-family:inherit;font-size:14px;line-height:28px;box-shadow:0 2px 0 #24170f;image-rendering:pixelated}
+.lang-toggle button:hover{background:#5b432f;color:#ffe2a0}
 </style>
 </head>
 <body>
@@ -68,6 +85,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;m
         <img class="panel-bg" id="fishPanelBg" src="sprites/book_fishpanel.png" alt="">
         <div class="fish-name" id="fishName">请选择一条鱼</div>
         <img class="big-fish-img" id="bigFishImg" src="" alt="" style="display:none">
+        <div class="fish-size-icons" id="fishSizeIcons"></div>
         <div class="rarity-text" id="rarityText"></div>
       </div>
       <div class="text-container">
@@ -80,6 +98,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;m
         </div>
         <div class="detail-row"><span class="label" data-label="spot">钓点:</span> <span id="detailSpot">-</span></div>
         <div class="detail-row"><span class="label" data-label="area">区域:</span> <span id="detailArea">-</span></div>
+        <div class="detail-row time-row"><span class="label time-label" data-label="time">获取奖杯<br>推荐时间</span><span class="time-colon">:</span><span class="time-value" id="detailTime">-</span></div>
         <div class="detail-row"><span class="label" data-label="size">尺寸:</span> <span id="detailSize">-</span></div>
         <div class="detail-row"><span class="label" data-label="length">长度:</span> <span id="detailLength">-</span></div>
         <div class="detail-row"><span class="label" data-label="weight">重量:</span> <span id="detailWeight">-</span></div>
@@ -88,6 +107,10 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;m
         <div class="sort-label" id="sortLabel">排序依据</div>
         <div class="sort-btn" onclick="toggleSort()" id="sortBtn">钓场</div>
         <div class="scroll-area" id="fishGrid"></div>
+        <div class="book-scrollbar" id="bookScrollbar">
+          <div class="book-scrollbar-track"></div>
+          <div class="book-scrollbar-thumb" id="bookScrollbarThumb"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -106,12 +129,21 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;m
 <script src="fishdata.js"></script>
 <script>
 var lang="zh",selectedEntry=null,sortMode="game";
-var LABEL_TEXT={zh:{spot:"钓点:",area:"区域:",size:"尺寸:",length:"长度:",weight:"重量:"},en:{spot:"Spot:",area:"Area:",size:"Size:",length:"Length:",weight:"Weight:"}};
+var LABEL_TEXT={zh:{spot:"钓点:",area:"区域:",time:"获取奖杯\n推荐时间",size:"尺寸:",length:"长度:",weight:"重量:"},en:{spot:"Spot:",area:"Area:",time:"Trophy\nbest time",size:"Size:",length:"Length:",weight:"Weight:"}};
 var SORT_TEXT={zh:{label:"排序依据",game:"钓场",name:"名称",rarity:"稀有度",all:"全部鱼类"},en:{label:"Sort by",game:"Spot",name:"Name",rarity:"Rarity",all:"All Fish"}};
 var RARITY_ORDER={Common:0,Uncommon:1,Rare:2,Epic:3,Legendary:4};
 var RARITY_COLOR={Common:"#5d5138",Uncommon:"#4f7a3f",Rare:"#3f6f8f",Epic:"#7b5792",Legendary:"#a56b2d"};
+var TIME_ICON={all:"game/time/time.png",day:"game/time/中午.png",dawn:"game/time/早晨.png",dusk:"game/time/傍晚.png",night:"game/time/晚上.png"};
+var SIZE_ICON={S:"game/size/s.png",M:"game/size/m.png",L:"game/size/l.png",XL:"game/size/xl.png",XXL:"game/size/xxxl.png"};
+var TROPHY_ICON={normal:"game/trophy/trophy.png",legendary:"game/trophy/legendary.png"};
 
 function fishById(id){for(var i=0;i<FISH_DATA.length;i++){if(FISH_DATA[i].id===id)return FISH_DATA[i]}return null}
+function centerBookInViewport(){
+  var x=Math.max(0,(document.documentElement.scrollWidth-window.innerWidth)/2);
+  var y=Math.max(0,(document.documentElement.scrollHeight-window.innerHeight)/2);
+  window.scrollTo(x,y);
+  document.body.classList.add("ready");
+}
 function firstGroupForFish(id){for(var i=0;i<LOCATION_GROUPS.length;i++){if(LOCATION_GROUPS[i].fish.indexOf(id)!==-1)return LOCATION_GROUPS[i]}return null}
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]})}
 function asset(rel){return "sprites/"+rel}
@@ -122,7 +154,21 @@ function groupTitle(group){
   var spot=lang==="zh"?group.spotZh:group.spot;
   return "<img class=\"loc-icon\" src=\"sprites/book_icon_foundlocation.png\" alt=\"\"><span>"+area+"</span><span class=\"spot\">"+spot+"</span>";
 }
-function updateLabels(){var labels=document.querySelectorAll(".text-container .label");for(var i=0;i<labels.length;i++){var key=labels[i].getAttribute("data-label");labels[i].textContent=LABEL_TEXT[lang][key]}}
+function renderTimeValue(fish){
+  var icons=fish.timeIcons&&fish.timeIcons.length?fish.timeIcons:[];
+  var text=lang==="zh"?(fish.timeZh||"-"):(fish.time||"-");
+  var html="";
+  for(var i=0;i<icons.length;i++){html+="<img src=\""+asset(TIME_ICON[icons[i]]||TIME_ICON.all)+"\" alt=\"\">"}
+  return html+"<span>"+esc(text)+"</span>";
+}
+function renderSizeIcons(fish){
+  var sizes=String(fish.size||"").split("/").map(function(v){return v.trim()}).filter(Boolean);
+  var html="";
+  for(var i=0;i<sizes.length;i++){if(SIZE_ICON[sizes[i]])html+="<img src=\""+asset(SIZE_ICON[sizes[i]])+"\" alt=\"\">"}
+  html+="<img class=\"trophy-icon\" src=\""+asset(TROPHY_ICON[fish.trophyType]||TROPHY_ICON.normal)+"\" alt=\"\">";
+  return html;
+}
+function updateLabels(){var labels=document.querySelectorAll(".text-container .label");for(var i=0;i<labels.length;i++){var key=labels[i].getAttribute("data-label");labels[i].innerHTML=esc(LABEL_TEXT[lang][key]).replace(/\n/g,"<br>")}}
 function updateSortText(){
   document.getElementById("sortLabel").textContent=SORT_TEXT[lang].label;
   document.getElementById("sortBtn").textContent=SORT_TEXT[lang][sortMode];
@@ -149,6 +195,7 @@ function selectFish(fish,group,rerender){
   var big=document.getElementById("bigFishImg");
   big.src=asset(fish.sprite);
   big.style.display="block";
+  document.getElementById("fishSizeIcons").innerHTML=renderSizeIcons(fish);
   document.getElementById("fishPanelBg").src=asset(group&&group.ice?"book_fishpanel_ice.png":"book_fishpanel.png");
   document.getElementById("detailRod").textContent=lang==="zh"?fish.rodZh:fish.rod;
   document.getElementById("detailRodIcon").src=asset(fish.rodIcon);
@@ -156,6 +203,7 @@ function selectFish(fish,group,rerender){
   document.getElementById("detailLureIcon").src=asset(fish.lureIcon);
   document.getElementById("detailSpot").textContent=group?(lang==="zh"?group.spotZh:group.spot):"-";
   document.getElementById("detailArea").textContent=group?(lang==="zh"?group.areaZh:group.area):"-";
+  document.getElementById("detailTime").innerHTML=renderTimeValue(fish);
   var sizeText=lang==="zh"?fish.sizeZh:fish.size;
   var lengthText=lang==="zh"?fish.lengthZh:fish.length;
   var weightText=lang==="zh"?fish.weightZh:fish.weight;
@@ -170,7 +218,7 @@ function locationEntries(){
     var group=LOCATION_GROUPS[i];
     for(var j=0;j<group.fish.length;j++){
       var fish=fishById(group.fish[j]);
-      if(fish)out.push({fish:fish,group:group,groupKey:group.id,groupName:groupTitle(group),order:i*100+j});
+      if(fish)out.push({fish:fish,group:group,groupKey:group.id,groupName:groupTitle(group),order:(group.order||i)*100+j});
     }
   }
   return out;
@@ -183,6 +231,62 @@ function singleFishEntries(){
     out.push({fish:fish,group:group,groupKey:"all",groupName:SORT_TEXT[lang].all,order:fish.order});
   }
   return out;
+}
+function updateBookScrollbar(){
+  var area=document.getElementById("fishGrid");
+  var bar=document.getElementById("bookScrollbar");
+  var thumb=document.getElementById("bookScrollbarThumb");
+  if(!area||!bar||!thumb)return;
+  var max=area.scrollHeight-area.clientHeight;
+  if(max<=1){bar.classList.remove("visible");return}
+  bar.classList.add("visible");
+  var track=bar.clientHeight;
+  var h=Math.max(24,Math.round(track*area.clientHeight/area.scrollHeight));
+  var y=Math.round((track-h)*(area.scrollTop/max));
+  thumb.style.height=h+"px";
+  thumb.style.top=y+"px";
+}
+function initBookScrollbar(){
+  var area=document.getElementById("fishGrid");
+  var bar=document.getElementById("bookScrollbar");
+  var thumb=document.getElementById("bookScrollbarThumb");
+  if(!area||!bar||!thumb)return;
+  var drag=null;
+  area.addEventListener("scroll",updateBookScrollbar);
+  area.addEventListener("wheel",function(e){
+    e.preventDefault();
+    area.scrollTop+=Math.sign(e.deltaY)*18;
+  },{passive:false});
+  thumb.addEventListener("mousedown",function(e){
+    e.preventDefault();
+    drag={startY:e.clientY,startTop:parseFloat(thumb.style.top)||0};
+    document.addEventListener("mousemove",onScrollbarDrag);
+    document.addEventListener("mouseup",endScrollbarDrag);
+  });
+  bar.addEventListener("mousedown",function(e){
+    if(e.target===thumb)return;
+    var rect=bar.getBoundingClientRect();
+    var thumbH=thumb.offsetHeight;
+    var y=e.clientY-rect.top-thumbH/2;
+    setScrollFromThumbTop(y);
+  });
+  function setScrollFromThumbTop(y){
+    var max=area.scrollHeight-area.clientHeight;
+    var track=bar.clientHeight-thumb.offsetHeight;
+    if(track<=0||max<=0)return;
+    y=Math.max(0,Math.min(track,y));
+    area.scrollTop=max*(y/track);
+  }
+  function onScrollbarDrag(e){
+    if(!drag)return;
+    setScrollFromThumbTop(drag.startTop+(e.clientY-drag.startY)/4);
+  }
+  function endScrollbarDrag(){
+    drag=null;
+    document.removeEventListener("mousemove",onScrollbarDrag);
+    document.removeEventListener("mouseup",endScrollbarDrag);
+  }
+  updateBookScrollbar();
 }
 function renderGrid(){
   var g=document.getElementById("fishGrid");
@@ -212,6 +316,8 @@ function renderGrid(){
   }
   if(current)html+="</div></div>";
   g.innerHTML=html;
+  g.scrollTop=0;
+  updateBookScrollbar();
   var nodes=g.querySelectorAll(".fish-thumb");
   for(var j=0;j<nodes.length;j++){
     nodes[j].onclick=function(){
@@ -226,7 +332,10 @@ function renderGrid(){
 updateLabels();
 updateSortText();
 document.addEventListener("dragstart",function(e){if(e.target&&e.target.tagName==="IMG")e.preventDefault()});
+initBookScrollbar();
 renderGrid();
+if(document.readyState!=="loading")centerBookInViewport();
+window.addEventListener("load",function(){centerBookInViewport();setTimeout(centerBookInViewport,50)});
 </script>
 </body>
 </html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Cast n Chill - Time Debug</title>
+<style>
+@font-face{font-family:zpix;src:url(zpix.ttf) format("truetype")}
+*{box-sizing:border-box}
+body{margin:0;background:#17151f;color:#eadfbd;font-family:zpix,"Courier New",monospace;font-size:14px}
+button,select,textarea{font-family:inherit}
+.app{display:grid;grid-template-columns:minmax(720px,1fr) 460px;gap:16px;min-height:100vh;padding:16px}
+.toolbar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:10px;background:#252033;border:1px solid #52435b}
+.toolbar h1{font-size:16px;font-weight:400;margin:0 14px 0 0;color:#f2c36d}
+.toolbar button,.toolbar select{background:#3a3044;color:#f5dfaa;border:1px solid #735a57;padding:6px 10px;cursor:pointer}
+.toolbar button:hover{background:#4a3a50}
+.groups{padding-top:12px}
+.group{margin:0 0 14px;border:1px solid #5b4d45;background:#241f28}
+.group-head{display:flex;align-items:center;gap:10px;padding:8px 10px;background:#342b33;color:#f1b06e}
+.order-badge{min-width:28px;text-align:center;color:#1d1620;background:#d8b168;padding:3px 5px}
+.group-title{flex:1}
+.group-id{color:#afa083;font-size:12px}
+.fish-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;padding:10px}
+.card{display:grid;grid-template-columns:72px 1fr;gap:9px;min-height:98px;border:1px solid #675842;background:#99856c;color:#241b17;padding:7px;image-rendering:pixelated}
+.thumb-wrap{position:relative;width:72px;height:54px;align-self:start}
+.thumb-bg{position:absolute;inset:0;width:72px;height:54px}
+.thumb-img{position:absolute;left:8px;top:5px;width:56px;height:44px;object-fit:contain;image-rendering:pixelated}
+.fish-name{font-size:12px;line-height:16px;margin-bottom:4px;word-break:break-word}
+.fish-id{font-size:10px;line-height:13px;color:#4c382b;margin-bottom:6px;word-break:break-all}
+.time-buttons{display:flex;flex-wrap:wrap;gap:4px}
+.time-btn{display:flex;align-items:center;gap:3px;background:#6e5947;color:#f7e2b2;border:1px solid #4e3f39;padding:3px 5px;cursor:pointer;font-size:11px;line-height:14px}
+.time-btn img{width:12px;height:12px;object-fit:contain;image-rendering:pixelated}
+.time-btn.active{background:#35273b;color:#ffe18c;border-color:#f0bd60}
+.side{position:sticky;top:16px;align-self:start;background:#211c28;border:1px solid #52435b;padding:12px}
+.side h2{font-size:15px;font-weight:400;color:#f2c36d;margin:0 0 10px}
+.hint{font-size:12px;line-height:18px;color:#c5b99d;margin-bottom:10px}
+textarea{width:100%;height:calc(100vh - 180px);min-height:360px;background:#15121a;color:#f4e2bb;border:1px solid #5f5058;padding:10px;font-size:12px;line-height:18px;resize:vertical}
+.side-actions{display:flex;gap:8px;margin-bottom:10px}
+.side-actions button{background:#4c3d3d;color:#f5dfaa;border:1px solid #80624e;padding:7px 10px;cursor:pointer}
+.empty{padding:18px;color:#b7aa8c}
+</style>
+</head>
+<body>
+<div class="app">
+  <main>
+    <div class="toolbar">
+      <h1>奖杯时间 Debug</h1>
+      <label>地点 <select id="groupFilter"></select></label>
+      <button id="resetBtn" type="button">恢复当前数据</button>
+      <button id="copyBtn" type="button">复制结果</button>
+    </div>
+    <div class="groups" id="groups"></div>
+  </main>
+  <aside class="side">
+    <h2>导出结果</h2>
+    <div class="hint">给每条鱼选择推荐时间。输出的 JS patch 可用于批量写回 <code>fishdata.js</code> 的 <code>timeIcons</code>、<code>timeZh</code>、<code>time</code> 字段。</div>
+    <div class="side-actions">
+      <button id="exportJsonBtn" type="button">JSON</button>
+      <button id="exportPatchBtn" type="button">JS Patch</button>
+    </div>
+    <textarea id="output" spellcheck="false"></textarea>
+  </aside>
+</div>
+<script src="fishdata.js"></script>
+<script>
+var mode="patch";
+var workingTimes={};
+var TIME_OPTIONS=[
+  {id:"all",zh:"全天",en:"All day",icon:"game/time/time.png"},
+  {id:"dawn",zh:"早晨",en:"Dawn",icon:"game/time/早晨.png"},
+  {id:"day",zh:"中午",en:"Day",icon:"game/time/中午.png"},
+  {id:"dusk",zh:"傍晚",en:"Dusk",icon:"game/time/傍晚.png"},
+  {id:"night",zh:"晚上",en:"Night",icon:"game/time/晚上.png"}
+];
+
+function asset(rel){return "sprites/"+rel}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]})}
+function padTier(t){var n=Math.max(1,Math.min(5,Number(t)||1));return "0"+n}
+function thumbBg(fish,group){var p=padTier(fish.sizeTier);return group&&group.ice?"book_thumb_found_ice_"+p+".png":"Book_Thumb_Found_"+p+".png"}
+function fishById(id){for(var i=0;i<FISH_DATA.length;i++){if(FISH_DATA[i].id===id)return FISH_DATA[i]}return null}
+function titleFor(group){return (group.areaZh||group.area)+" "+(group.spotZh||group.spot)}
+function optionById(id){for(var i=0;i<TIME_OPTIONS.length;i++){if(TIME_OPTIONS[i].id===id)return TIME_OPTIONS[i]}return null}
+function timeText(ids,field){
+  if(!ids.length)return field==="zh"?"-":"-";
+  var out=[];
+  for(var i=0;i<ids.length;i++){var opt=optionById(ids[i]);if(opt)out.push(field==="zh"?opt.zh:opt.en)}
+  return out.join(" / ");
+}
+function cloneTimes(){
+  workingTimes={};
+  for(var i=0;i<FISH_DATA.length;i++){
+    var fish=FISH_DATA[i];
+    var icons=fish.timeIcons&&fish.timeIcons.length?fish.timeIcons.slice():[];
+    workingTimes[fish.id]=icons;
+  }
+}
+function renderFilter(){
+  var sel=document.getElementById("groupFilter");
+  var html='<option value="">全部地点</option>';
+  for(var i=0;i<LOCATION_GROUPS.length;i++){
+    html+='<option value="'+esc(LOCATION_GROUPS[i].id)+'">'+esc((LOCATION_GROUPS[i].order||i+1)+". "+titleFor(LOCATION_GROUPS[i]))+'</option>';
+  }
+  sel.innerHTML=html;
+}
+function groupsForFilter(){
+  var filter=document.getElementById("groupFilter").value;
+  if(!filter)return LOCATION_GROUPS.slice().sort(function(a,b){return(a.order||0)-(b.order||0)});
+  for(var i=0;i<LOCATION_GROUPS.length;i++){if(LOCATION_GROUPS[i].id===filter)return [LOCATION_GROUPS[i]]}
+  return [];
+}
+function renderFishCard(fish,group){
+  var ids=workingTimes[fish.id]||[];
+  var html='<div class="card" data-fish="'+esc(fish.id)+'">';
+  html+='<div class="thumb-wrap"><img class="thumb-bg" src="sprites/'+thumbBg(fish,group)+'" alt=""><img class="thumb-img" src="'+asset(fish.thumb)+'" alt=""></div>';
+  html+='<div><div class="fish-name">'+esc(fish.zh||fish.en)+'</div><div class="fish-id">'+esc(fish.id)+'</div><div class="time-buttons">';
+  for(var j=0;j<TIME_OPTIONS.length;j++){
+    var opt=TIME_OPTIONS[j],active=ids.indexOf(opt.id)!==-1;
+    html+='<button class="time-btn'+(active?" active":"")+'" type="button" data-fish="'+esc(fish.id)+'" data-time="'+esc(opt.id)+'"><img src="'+asset(opt.icon)+'" alt="">'+esc(opt.zh)+'</button>';
+  }
+  html+='</div></div></div>';
+  return html;
+}
+function renderGroups(){
+  var root=document.getElementById("groups");
+  var groups=groupsForFilter();
+  var html="";
+  for(var i=0;i<groups.length;i++){
+    var group=groups[i];
+    html+='<section class="group">';
+    html+='<div class="group-head"><span class="order-badge">'+esc(group.order||i+1)+'</span><div class="group-title">'+esc(titleFor(group))+'</div><div class="group-id">'+esc(group.id)+'</div></div>';
+    html+='<div class="fish-list">';
+    if(!group.fish.length)html+='<div class="empty">没有鱼类</div>';
+    for(var j=0;j<group.fish.length;j++){
+      var fish=fishById(group.fish[j]);
+      if(fish)html+=renderFishCard(fish,group);
+    }
+    html+='</div></section>';
+  }
+  root.innerHTML=html||'<div class="empty">没有匹配的地点</div>';
+  bindButtons();
+  updateOutput();
+}
+function toggleTime(fishId,timeId){
+  var ids=workingTimes[fishId]||[];
+  if(timeId==="all"){
+    ids=ids.indexOf("all")===-1?["all"]:[];
+  }else{
+    ids=ids.filter(function(id){return id!=="all"});
+    var idx=ids.indexOf(timeId);
+    if(idx===-1)ids.push(timeId);
+    else ids.splice(idx,1);
+  }
+  workingTimes[fishId]=ids;
+}
+function bindButtons(){
+  var buttons=document.querySelectorAll(".time-btn");
+  for(var i=0;i<buttons.length;i++){
+    buttons[i].addEventListener("click",function(){
+      toggleTime(this.getAttribute("data-fish"),this.getAttribute("data-time"));
+      renderGroups();
+    });
+  }
+}
+function exportJson(){
+  var obj={};
+  for(var i=0;i<FISH_DATA.length;i++){
+    var fish=FISH_DATA[i],ids=workingTimes[fish.id]||[];
+    obj[fish.id]={timeIcons:ids,timeZh:timeText(ids,"zh"),time:timeText(ids,"en")};
+  }
+  return JSON.stringify(obj,null,2);
+}
+function exportPatch(){
+  var lines=["const FISH_TIME_PATCH = "+exportJson()+";","","FISH_DATA.forEach(function(fish){","  var time = FISH_TIME_PATCH[fish.id];","  if(!time)return;","  fish.timeIcons = time.timeIcons;","  fish.timeZh = time.timeZh;","  fish.time = time.time;","});"];
+  return lines.join("\n");
+}
+function updateOutput(){document.getElementById("output").value=mode==="json"?exportJson():exportPatch()}
+function copyOutput(){
+  var out=document.getElementById("output");
+  out.focus();
+  out.select();
+  navigator.clipboard.writeText(out.value).catch(function(){document.execCommand("copy")});
+}
+document.getElementById("groupFilter").addEventListener("change",renderGroups);
+document.getElementById("resetBtn").addEventListener("click",function(){cloneTimes();renderGroups()});
+document.getElementById("copyBtn").addEventListener("click",copyOutput);
+document.getElementById("exportJsonBtn").addEventListener("click",function(){mode="json";updateOutput()});
+document.getElementById("exportPatchBtn").addEventListener("click",function(){mode="patch";updateOutput()});
+cloneTimes();
+renderFilter();
+renderGroups();
+</script>
+</body>
+</html>

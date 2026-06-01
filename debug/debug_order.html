@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Cast n Chill - Order Debug</title>
+<style>
+@font-face{font-family:zpix;src:url(zpix.ttf) format("truetype")}
+*{box-sizing:border-box}
+body{margin:0;background:#17151f;color:#eadfbd;font-family:zpix,"Courier New",monospace;font-size:14px}
+button,select,textarea{font-family:inherit}
+.app{display:grid;grid-template-columns:minmax(640px,1fr) 430px;gap:16px;min-height:100vh;padding:16px}
+.toolbar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:10px;background:#252033;border:1px solid #52435b}
+.toolbar h1{font-size:16px;font-weight:400;margin:0 14px 0 0;color:#f2c36d}
+.toolbar button,.toolbar select{background:#3a3044;color:#f5dfaa;border:1px solid #735a57;padding:6px 10px;cursor:pointer}
+.toolbar button:hover{background:#4a3a50}
+.groups{padding-top:12px}
+.group{margin:0 0 14px;border:1px solid #5b4d45;background:#241f28}
+.group-head{display:flex;align-items:center;gap:10px;padding:8px 10px;background:#342b33;color:#f1b06e}
+.order-badge{min-width:28px;text-align:center;color:#1d1620;background:#d8b168;padding:3px 5px}
+.group-title{flex:1}
+.group-id{color:#afa083;font-size:12px}
+.fish-row{display:flex;flex-wrap:wrap;gap:8px;min-height:72px;padding:10px}
+.card{width:112px;min-height:92px;position:relative;border:1px solid #675842;background:#99856c;color:#241b17;cursor:grab;image-rendering:pixelated}
+.card:active{cursor:grabbing}
+.card.dragging{opacity:.45}
+.card.drop-before{outline:3px solid #f1c35d;outline-offset:2px}
+.thumb-wrap{position:relative;width:72px;height:54px;margin:7px auto 3px}
+.thumb-bg{position:absolute;inset:0;width:72px;height:54px}
+.thumb-img{position:absolute;left:8px;top:5px;width:56px;height:44px;object-fit:contain;image-rendering:pixelated}
+.fish-name{padding:0 5px 6px;text-align:center;font-size:11px;line-height:15px;word-break:break-word}
+.fish-id{display:none}
+.side{position:sticky;top:16px;align-self:start;background:#211c28;border:1px solid #52435b;padding:12px}
+.side h2{font-size:15px;font-weight:400;color:#f2c36d;margin:0 0 10px}
+.hint{font-size:12px;line-height:18px;color:#c5b99d;margin-bottom:10px}
+textarea{width:100%;height:calc(100vh - 180px);min-height:360px;background:#15121a;color:#f4e2bb;border:1px solid #5f5058;padding:10px;font-size:12px;line-height:18px;resize:vertical}
+.side-actions{display:flex;gap:8px;margin-bottom:10px}
+.side-actions button{background:#4c3d3d;color:#f5dfaa;border:1px solid #80624e;padding:7px 10px;cursor:pointer}
+.empty{padding:18px;color:#b7aa8c}
+</style>
+</head>
+<body>
+<div class="app">
+  <main>
+    <div class="toolbar">
+      <h1>鱼图标顺序 Debug</h1>
+      <label>地点 <select id="groupFilter"></select></label>
+      <button id="resetBtn" type="button">恢复当前数据</button>
+      <button id="copyBtn" type="button">复制结果</button>
+    </div>
+    <div class="groups" id="groups"></div>
+  </main>
+  <aside class="side">
+    <h2>导出结果</h2>
+    <div class="hint">拖动鱼卡片调整顺序。这里实时输出每个地点的鱼 ID 顺序，可以用来回填 <code>fishdata.js</code>。</div>
+    <div class="side-actions">
+      <button id="exportJsonBtn" type="button">JSON</button>
+      <button id="exportSnippetBtn" type="button">JS 片段</button>
+    </div>
+    <textarea id="output" spellcheck="false"></textarea>
+  </aside>
+</div>
+<script src="fishdata.js"></script>
+<script>
+var mode="snippet";
+var dragData=null;
+var workingGroups=[];
+
+function asset(rel){return "sprites/"+rel}
+function fishById(id){for(var i=0;i<FISH_DATA.length;i++){if(FISH_DATA[i].id===id)return FISH_DATA[i]}return null}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]})}
+function padTier(t){var n=Math.max(1,Math.min(5,Number(t)||1));return "0"+n}
+function thumbBg(fish,group){var p=padTier(fish.sizeTier);return group&&group.ice?"book_thumb_found_ice_"+p+".png":"Book_Thumb_Found_"+p+".png"}
+function cloneGroups(){
+  workingGroups=LOCATION_GROUPS.map(function(g){
+    var copy={};
+    for(var k in g)copy[k]=Array.isArray(g[k])?g[k].slice():g[k];
+    return copy;
+  }).sort(function(a,b){return(a.order||0)-(b.order||0)});
+}
+function titleFor(group){return (group.areaZh||group.area)+" "+(group.spotZh||group.spot)}
+function renderFilter(){
+  var sel=document.getElementById("groupFilter");
+  var html='<option value="">全部地点</option>';
+  for(var i=0;i<workingGroups.length;i++){
+    html+='<option value="'+esc(workingGroups[i].id)+'">'+esc((workingGroups[i].order||i+1)+". "+titleFor(workingGroups[i]))+'</option>';
+  }
+  sel.innerHTML=html;
+}
+function renderGroups(){
+  var filter=document.getElementById("groupFilter").value;
+  var root=document.getElementById("groups");
+  var html="";
+  for(var i=0;i<workingGroups.length;i++){
+    var group=workingGroups[i];
+    if(filter&&group.id!==filter)continue;
+    html+='<section class="group" data-group="'+esc(group.id)+'">';
+    html+='<div class="group-head"><span class="order-badge">'+esc(group.order||i+1)+'</span><div class="group-title">'+esc(titleFor(group))+'</div><div class="group-id">'+esc(group.id)+'</div></div>';
+    html+='<div class="fish-row" data-group="'+esc(group.id)+'">';
+    if(!group.fish.length)html+='<div class="empty">无鱼</div>';
+    for(var j=0;j<group.fish.length;j++){
+      var fish=fishById(group.fish[j]);
+      if(!fish)continue;
+      html+='<div class="card" draggable="true" data-group="'+esc(group.id)+'" data-fish="'+esc(fish.id)+'">';
+      html+='<div class="thumb-wrap"><img class="thumb-bg" src="sprites/'+thumbBg(fish,group)+'" alt=""><img class="thumb-img" src="'+asset(fish.thumb)+'" alt=""></div>';
+      html+='<div class="fish-name">'+esc(fish.zh||fish.en)+'</div><div class="fish-id">'+esc(fish.id)+'</div>';
+      html+='</div>';
+    }
+    html+='</div></section>';
+  }
+  root.innerHTML=html||'<div class="empty">没有匹配的地点</div>';
+  bindDrag();
+  updateOutput();
+}
+function findGroup(id){for(var i=0;i<workingGroups.length;i++){if(workingGroups[i].id===id)return workingGroups[i]}return null}
+function moveFish(groupId,fishId,beforeId){
+  var group=findGroup(groupId);
+  if(!group)return;
+  var from=group.fish.indexOf(fishId);
+  if(from===-1)return;
+  group.fish.splice(from,1);
+  var to=beforeId?group.fish.indexOf(beforeId):-1;
+  if(to===-1)group.fish.push(fishId);
+  else group.fish.splice(to,0,fishId);
+}
+function bindDrag(){
+  var cards=document.querySelectorAll(".card");
+  for(var i=0;i<cards.length;i++){
+    cards[i].addEventListener("dragstart",function(e){
+      dragData={group:this.getAttribute("data-group"),fish:this.getAttribute("data-fish")};
+      this.classList.add("dragging");
+      e.dataTransfer.effectAllowed="move";
+      e.dataTransfer.setData("text/plain",dragData.fish);
+    });
+    cards[i].addEventListener("dragend",function(){this.classList.remove("dragging")});
+    cards[i].addEventListener("dragover",function(e){
+      if(!dragData||dragData.group!==this.getAttribute("data-group"))return;
+      e.preventDefault();
+      this.classList.add("drop-before");
+    });
+    cards[i].addEventListener("dragleave",function(){this.classList.remove("drop-before")});
+    cards[i].addEventListener("drop",function(e){
+      e.preventDefault();
+      this.classList.remove("drop-before");
+      if(!dragData)return;
+      moveFish(dragData.group,dragData.fish,this.getAttribute("data-fish"));
+      renderGroups();
+    });
+  }
+  var rows=document.querySelectorAll(".fish-row");
+  for(var j=0;j<rows.length;j++){
+    rows[j].addEventListener("dragover",function(e){
+      if(dragData&&dragData.group===this.getAttribute("data-group"))e.preventDefault();
+    });
+    rows[j].addEventListener("drop",function(e){
+      e.preventDefault();
+      if(!dragData||dragData.group!==this.getAttribute("data-group"))return;
+      if(e.target.closest&&e.target.closest(".card"))return;
+      moveFish(dragData.group,dragData.fish,null);
+      renderGroups();
+    });
+  }
+}
+function exportJson(){
+  var obj={};
+  for(var i=0;i<workingGroups.length;i++)obj[workingGroups[i].id]=workingGroups[i].fish.slice();
+  return JSON.stringify(obj,null,2);
+}
+function exportSnippet(){
+  var lines=[];
+  for(var i=0;i<workingGroups.length;i++){
+    var g=workingGroups[i];
+    if(!g.fish.length)continue;
+    lines.push(g.id+": [");
+    for(var j=0;j<g.fish.length;j++)lines.push('  "'+g.fish[j]+'"'+(j<g.fish.length-1?",":""));
+    lines.push("]");
+    lines.push("");
+  }
+  return lines.join("\n").trim();
+}
+function updateOutput(){document.getElementById("output").value=mode==="json"?exportJson():exportSnippet()}
+function copyOutput(){
+  var out=document.getElementById("output");
+  out.focus();
+  out.select();
+  navigator.clipboard.writeText(out.value).catch(function(){document.execCommand("copy")});
+}
+document.getElementById("groupFilter").addEventListener("change",renderGroups);
+document.getElementById("resetBtn").addEventListener("click",function(){cloneGroups();renderFilter();renderGroups()});
+document.getElementById("copyBtn").addEventListener("click",copyOutput);
+document.getElementById("exportJsonBtn").addEventListener("click",function(){mode="json";updateOutput()});
+document.getElementById("exportSnippetBtn").addEventListener("click",function(){mode="snippet";updateOutput()});
+cloneGroups();
+renderFilter();
+renderGroups();
+</script>
+</body>
+</html>

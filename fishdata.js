@@ -25,7 +25,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Bobber",
     "lureZh": "浮漂",
-    "lureIcon": "game/lures/bobber01.png"
+    "lureIcon": "game/lures/bobber01.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "bluegill-sunfish",
@@ -53,7 +58,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Bobber",
     "lureZh": "浮漂",
-    "lureIcon": "game/lures/bobber01.png"
+    "lureIcon": "game/lures/bobber01.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "walleye",
@@ -80,7 +90,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Spoonbait",
     "lureZh": "匙型饵",
-    "lureIcon": "game/lures/spoon01.png"
+    "lureIcon": "game/lures/spoon01.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "common-carp",
@@ -107,7 +122,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Crankbait",
     "lureZh": "曲柄饵",
-    "lureIcon": "game/lures/crankbait03.png"
+    "lureIcon": "game/lures/crankbait03.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "northern-pike",
@@ -134,7 +154,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Bladebait",
     "lureZh": "刀饵",
-    "lureIcon": "game/lures/blade03.png"
+    "lureIcon": "game/lures/blade03.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "muskie",
@@ -161,7 +186,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Spoonbait",
     "lureZh": "匙型饵",
-    "lureIcon": "game/lures/spoon03.png"
+    "lureIcon": "game/lures/spoon03.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "shorthead-redhorse",
@@ -188,7 +218,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Dropshot",
     "lureZh": "倒钓钓组",
-    "lureIcon": "game/lures/dropshot01.png"
+    "lureIcon": "game/lures/dropshot01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "burbot",
@@ -215,7 +250,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Spoonbait",
     "lureZh": "匙型饵",
-    "lureIcon": "game/lures/spoon01.png"
+    "lureIcon": "game/lures/spoon01.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "crappie",
@@ -242,7 +282,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Spoonbait",
     "lureZh": "匙型饵",
-    "lureIcon": "game/lures/spoon02.png"
+    "lureIcon": "game/lures/spoon02.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "smallmouth-bass",
@@ -269,7 +314,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Crankbait",
     "lureZh": "曲柄饵",
-    "lureIcon": "game/lures/crankbait02.png"
+    "lureIcon": "game/lures/crankbait02.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "largemouth-bass",
@@ -296,7 +346,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Jighead",
     "lureZh": "铅头钩",
-    "lureIcon": "game/lures/jighead01.png"
+    "lureIcon": "game/lures/jighead01.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "rockbass",
@@ -323,7 +378,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Dropshot",
     "lureZh": "倒钓钓组",
-    "lureIcon": "game/lures/dropshot01.png"
+    "lureIcon": "game/lures/dropshot01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "yellow-perch",
@@ -350,7 +410,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Wacky Worm",
     "lureZh": "歪奇虫饵",
-    "lureIcon": "game/lures/whacky01.png"
+    "lureIcon": "game/lures/whacky01.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "lake-trout",
@@ -377,7 +442,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner02.png"
+    "lureIcon": "game/lures/spinner02.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "steelhead-trout",
@@ -405,7 +475,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner02.png"
+    "lureIcon": "game/lures/spinner02.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "rainbow-trout",
@@ -432,7 +507,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Bladebait",
     "lureZh": "刀饵",
-    "lureIcon": "game/lures/blade02.png"
+    "lureIcon": "game/lures/blade02.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "brown-trout",
@@ -460,7 +540,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Crankbait",
     "lureZh": "曲柄饵",
-    "lureIcon": "game/lures/crankbait02.png"
+    "lureIcon": "game/lures/crankbait02.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "brook-trout",
@@ -487,7 +572,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Topwater",
     "lureZh": "水面饵",
-    "lureIcon": "game/lures/topwater01.png"
+    "lureIcon": "game/lures/topwater01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "tiger-trout",
@@ -515,7 +605,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner01.png"
+    "lureIcon": "game/lures/spinner01.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "cutthroat-trout",
@@ -542,7 +637,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner02.png"
+    "lureIcon": "game/lures/spinner02.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "arctic-char",
@@ -569,7 +669,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Bladebait",
     "lureZh": "刀饵",
-    "lureIcon": "game/lures/blade01.png"
+    "lureIcon": "game/lures/blade01.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "arctic-grayling",
@@ -596,7 +701,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner01.png"
+    "lureIcon": "game/lures/spinner01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "cisco",
@@ -623,7 +733,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Bobber",
     "lureZh": "浮漂",
-    "lureIcon": "game/lures/bobber01.png"
+    "lureIcon": "game/lures/bobber01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "lake-whitefish",
@@ -650,7 +765,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Wacky Worm",
     "lureZh": "歪奇虫饵",
-    "lureIcon": "game/lures/whacky01.png"
+    "lureIcon": "game/lures/whacky01.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "round-whitefish",
@@ -677,7 +797,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Dropshot",
     "lureZh": "倒钓钓组",
-    "lureIcon": "game/lures/dropshot01.png"
+    "lureIcon": "game/lures/dropshot01.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "mountain-whitefish",
@@ -704,7 +829,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Topwater",
     "lureZh": "水面饵",
-    "lureIcon": "game/lures/topwater01.png"
+    "lureIcon": "game/lures/topwater01.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "longnose-sucker",
@@ -731,7 +861,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Dropshot",
     "lureZh": "倒钓钓组",
-    "lureIcon": "game/lures/dropshot01.png"
+    "lureIcon": "game/lures/dropshot01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "white-sucker",
@@ -758,7 +893,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Dropshot",
     "lureZh": "倒钓钓组",
-    "lureIcon": "game/lures/dropshot01.png"
+    "lureIcon": "game/lures/dropshot01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "mooneye",
@@ -785,7 +925,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner01.png"
+    "lureIcon": "game/lures/spinner01.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "goldeye",
@@ -812,7 +957,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner01.png"
+    "lureIcon": "game/lures/spinner01.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "creek-chub",
@@ -839,7 +989,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner01.png"
+    "lureIcon": "game/lures/spinner01.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "bullhead-catfish",
@@ -866,7 +1021,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Dropshot",
     "lureZh": "倒钓钓组",
-    "lureIcon": "game/lures/dropshot01.png"
+    "lureIcon": "game/lures/dropshot01.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "longnose-dace",
@@ -893,7 +1053,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Bobber",
     "lureZh": "浮漂",
-    "lureIcon": "game/lures/bobber01.png"
+    "lureIcon": "game/lures/bobber01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "eulachon",
@@ -920,7 +1085,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Bobber",
     "lureZh": "浮漂",
-    "lureIcon": "game/lures/bobber01.png"
+    "lureIcon": "game/lures/bobber01.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "capelin",
@@ -947,7 +1117,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Bobber",
     "lureZh": "浮漂",
-    "lureIcon": "game/lures/bobber01.png"
+    "lureIcon": "game/lures/bobber01.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "pacific-herring",
@@ -975,7 +1150,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Bobber",
     "lureZh": "浮漂",
-    "lureIcon": "game/lures/bobber01.png"
+    "lureIcon": "game/lures/bobber01.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "american-shad",
@@ -1003,7 +1183,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Bobber",
     "lureZh": "浮漂",
-    "lureIcon": "game/lures/bobber02.png"
+    "lureIcon": "game/lures/bobber02.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "atlantic-salmon",
@@ -1031,7 +1216,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Crankbait",
     "lureZh": "曲柄饵",
-    "lureIcon": "game/lures/crankbait03.png"
+    "lureIcon": "game/lures/crankbait03.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "chinook-salmon",
@@ -1059,7 +1249,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Glidebait",
     "lureZh": "滑动饵",
-    "lureIcon": "game/lures/glide02.png"
+    "lureIcon": "game/lures/glide02.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "coho-salmon",
@@ -1087,7 +1282,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Jighead",
     "lureZh": "铅头钩",
-    "lureIcon": "game/lures/jighead01.png"
+    "lureIcon": "game/lures/jighead01.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "sockeye-salmon",
@@ -1115,7 +1315,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Spoonbait",
     "lureZh": "匙型饵",
-    "lureIcon": "game/lures/spoon02.png"
+    "lureIcon": "game/lures/spoon02.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "pink-salmon",
@@ -1142,7 +1347,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Glidebait",
     "lureZh": "滑动饵",
-    "lureIcon": "game/lures/glide01.png"
+    "lureIcon": "game/lures/glide01.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "chum-salmon",
@@ -1170,7 +1380,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Jighead",
     "lureZh": "铅头钩",
-    "lureIcon": "game/lures/jighead01.png"
+    "lureIcon": "game/lures/jighead01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "masu-salmon",
@@ -1198,7 +1413,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Spoonbait",
     "lureZh": "匙型饵",
-    "lureIcon": "game/lures/spoon02.png"
+    "lureIcon": "game/lures/spoon02.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "dolly-varden",
@@ -1226,7 +1446,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner02.png"
+    "lureIcon": "game/lures/spinner02.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "lingcod",
@@ -1254,7 +1479,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Jighead",
     "lureZh": "铅头钩",
-    "lureIcon": "game/lures/jighead02.png"
+    "lureIcon": "game/lures/jighead02.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "greenland-halibut",
@@ -1281,7 +1511,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Bladebait",
     "lureZh": "刀饵",
-    "lureIcon": "game/lures/blade03.png"
+    "lureIcon": "game/lures/blade03.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "pacific-halibut",
@@ -1308,7 +1543,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Bladebait",
     "lureZh": "刀饵",
-    "lureIcon": "game/lures/blade03.png"
+    "lureIcon": "game/lures/blade03.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "yelloweye-rockfish",
@@ -1335,7 +1575,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Spoonbait",
     "lureZh": "匙型饵",
-    "lureIcon": "game/lures/spoon01.png"
+    "lureIcon": "game/lures/spoon01.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "striped-bass",
@@ -1363,7 +1608,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Crankbait",
     "lureZh": "曲柄饵",
-    "lureIcon": "game/lures/crankbait03.png"
+    "lureIcon": "game/lures/crankbait03.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "channel-catfish",
@@ -1390,7 +1640,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Dropshot",
     "lureZh": "倒钓钓组",
-    "lureIcon": "game/lures/dropshot02.png"
+    "lureIcon": "game/lures/dropshot02.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "white-bass",
@@ -1417,7 +1672,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Crankbait",
     "lureZh": "曲柄饵",
-    "lureIcon": "game/lures/crankbait01.png"
+    "lureIcon": "game/lures/crankbait01.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "hybrid-striped-bass",
@@ -1444,7 +1704,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Jighead",
     "lureZh": "铅头钩",
-    "lureIcon": "game/lures/jighead01.png"
+    "lureIcon": "game/lures/jighead01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "humpback-whitefish",
@@ -1471,7 +1736,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner01.png"
+    "lureIcon": "game/lures/spinner01.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "peamouth",
@@ -1499,7 +1769,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Bobber",
     "lureZh": "浮漂",
-    "lureIcon": "game/lures/bobber01.png"
+    "lureIcon": "game/lures/bobber01.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "largescale-sucker",
@@ -1526,7 +1801,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Dropshot",
     "lureZh": "倒钓钓组",
-    "lureIcon": "game/lures/dropshot01.png"
+    "lureIcon": "game/lures/dropshot01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "northern-pikeminnow",
@@ -1554,7 +1834,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Swimbait",
     "lureZh": "游动饵",
-    "lureIcon": "game/lures/swim02.png"
+    "lureIcon": "game/lures/swim02.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "white-sturgeon",
@@ -1581,7 +1866,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Swimbait",
     "lureZh": "游动饵",
-    "lureIcon": "game/lures/swim02.png"
+    "lureIcon": "game/lures/swim02.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "ice-walleye",
@@ -1608,7 +1898,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Spoonbait",
     "lureZh": "匙型饵",
-    "lureIcon": "game/lures/spoon01.png"
+    "lureIcon": "game/lures/spoon01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   },
   {
     "id": "ice-northern-pike",
@@ -1635,7 +1930,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Bladebait",
     "lureZh": "刀饵",
-    "lureIcon": "game/lures/blade02.png"
+    "lureIcon": "game/lures/blade02.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "ice-muskie",
@@ -1662,7 +1962,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Spoonbait",
     "lureZh": "匙型饵",
-    "lureIcon": "game/lures/spoon01.png"
+    "lureIcon": "game/lures/spoon01.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "ice-tiger-muskie",
@@ -1689,7 +1994,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod07.png",
     "lure": "Crankbait",
     "lureZh": "曲柄饵",
-    "lureIcon": "game/lures/crankbait03.png"
+    "lureIcon": "game/lures/crankbait03.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "ice-smallmouth-bass",
@@ -1716,7 +2026,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Crankbait",
     "lureZh": "曲柄饵",
-    "lureIcon": "game/lures/crankbait02.png"
+    "lureIcon": "game/lures/crankbait02.png",
+    "timeIcons": [
+      "night"
+    ],
+    "timeZh": "晚上",
+    "time": "Night"
   },
   {
     "id": "ice-largemouth-bass",
@@ -1743,7 +2058,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Jighead",
     "lureZh": "铅头钩",
-    "lureIcon": "game/lures/jighead01.png"
+    "lureIcon": "game/lures/jighead01.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "ice-yellow-perch",
@@ -1770,7 +2090,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod01.png",
     "lure": "Wacky Worm",
     "lureZh": "歪奇虫饵",
-    "lureIcon": "game/lures/whacky01.png"
+    "lureIcon": "game/lures/whacky01.png",
+    "timeIcons": [
+      "dusk"
+    ],
+    "timeZh": "傍晚",
+    "time": "Dusk"
   },
   {
     "id": "ice-lake-trout",
@@ -1797,7 +2122,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Spinnerbait",
     "lureZh": "旋转亮片饵",
-    "lureIcon": "game/lures/spinner02.png"
+    "lureIcon": "game/lures/spinner02.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "ice-channel-catfish",
@@ -1824,7 +2154,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod06.png",
     "lure": "Dropshot",
     "lureZh": "倒钓钓组",
-    "lureIcon": "game/lures/dropshot02.png"
+    "lureIcon": "game/lures/dropshot02.png",
+    "timeIcons": [
+      "dawn"
+    ],
+    "timeZh": "早晨",
+    "time": "Dawn"
   },
   {
     "id": "ice-arctic-char",
@@ -1851,7 +2186,12 @@ const FISH_DATA = [
     "rodIcon": "game/rods/cropped/rod02.png",
     "lure": "Bladebait",
     "lureZh": "刀饵",
-    "lureIcon": "game/lures/blade01.png"
+    "lureIcon": "game/lures/blade01.png",
+    "timeIcons": [
+      "day"
+    ],
+    "timeZh": "中午",
+    "time": "Day"
   }
 ];
 
@@ -1865,11 +2205,11 @@ const LOCATION_GROUPS = [
     "spot": "The Fork",
     "spotZh": "分岔口",
     "fish": [
-      "bluegill-sunfish",
-      "brown-trout",
-      "smallmouth-bass",
       "threadfin-shad",
-      "walleye"
+      "smallmouth-bass",
+      "walleye",
+      "bluegill-sunfish",
+      "brown-trout"
     ],
     "ice": false
   },
@@ -1882,11 +2222,11 @@ const LOCATION_GROUPS = [
     "spot": "Beaver Dam",
     "spotZh": "海狸坝",
     "fish": [
-      "brown-trout",
-      "bullhead-catfish",
-      "crappie",
       "largemouth-bass",
-      "longnose-sucker"
+      "bullhead-catfish",
+      "longnose-sucker",
+      "brown-trout",
+      "crappie"
     ],
     "ice": false
   },
@@ -1899,11 +2239,11 @@ const LOCATION_GROUPS = [
     "spot": "The Mistwood",
     "spotZh": "迷雾林",
     "fish": [
-      "burbot",
-      "creek-chub",
-      "rockbass",
       "shorthead-redhorse",
-      "steelhead-trout"
+      "rockbass",
+      "burbot",
+      "steelhead-trout",
+      "creek-chub"
     ],
     "ice": false
   },
@@ -1916,11 +2256,11 @@ const LOCATION_GROUPS = [
     "spot": "The Rapids",
     "spotZh": "急流区",
     "fish": [
+      "muskie",
+      "mountain-whitefish",
       "brook-trout",
       "chum-salmon",
-      "coho-salmon",
-      "mountain-whitefish",
-      "muskie"
+      "coho-salmon"
     ],
     "ice": false
   },
@@ -1933,11 +2273,11 @@ const LOCATION_GROUPS = [
     "spot": "Eagles Nest",
     "spotZh": "鹰巢",
     "fish": [
-      "arctic-grayling",
       "cutthroat-trout",
+      "arctic-grayling",
+      "sockeye-salmon",
       "longnose-dace",
-      "masu-salmon",
-      "sockeye-salmon"
+      "masu-salmon"
     ],
     "ice": false
   },
@@ -1950,10 +2290,10 @@ const LOCATION_GROUPS = [
     "spot": "Underwater Meadow",
     "spotZh": "水下草甸",
     "fish": [
-      "cisco",
       "northern-pike",
-      "rainbow-trout",
+      "cisco",
       "tiger-trout",
+      "rainbow-trout",
       "yellow-perch"
     ],
     "ice": false
@@ -1967,10 +2307,10 @@ const LOCATION_GROUPS = [
     "spot": "Picnic Point",
     "spotZh": "野餐点",
     "fish": [
-      "bluegill-sunfish",
-      "lake-trout",
       "lake-whitefish",
+      "lake-trout",
       "mooneye",
+      "bluegill-sunfish",
       "tiger-trout"
     ],
     "ice": false
@@ -1984,11 +2324,11 @@ const LOCATION_GROUPS = [
     "spot": "Fisherman's Rest",
     "spotZh": "渔夫憩所",
     "fish": [
-      "arctic-char",
-      "common-carp",
       "goldeye",
+      "arctic-char",
+      "white-sucker",
       "round-whitefish",
-      "white-sucker"
+      "common-carp"
     ],
     "ice": false
   },
@@ -2001,11 +2341,11 @@ const LOCATION_GROUPS = [
     "spot": "Shallows Edge",
     "spotZh": "浅滩界",
     "fish": [
+      "northern-pikeminnow",
       "channel-catfish",
       "hybrid-striped-bass",
-      "northern-pikeminnow",
-      "peamouth",
-      "white-bass"
+      "white-bass",
+      "peamouth"
     ],
     "ice": false
   },
@@ -2018,11 +2358,11 @@ const LOCATION_GROUPS = [
     "spot": "Otter Cove",
     "spotZh": "水獭湾",
     "fish": [
-      "humpback-whitefish",
-      "largescale-sucker",
       "northern-pikeminnow",
+      "largescale-sucker",
+      "white-sturgeon",
       "peamouth",
-      "white-sturgeon"
+      "humpback-whitefish"
     ],
     "ice": false
   },
@@ -2046,10 +2386,10 @@ const LOCATION_GROUPS = [
     "spot": "Watchers Point",
     "spotZh": "守望角",
     "fish": [
-      "american-shad",
       "atlantic-salmon",
-      "lingcod",
       "pacific-herring",
+      "american-shad",
+      "lingcod",
       "yelloweye-rockfish"
     ],
     "ice": false
@@ -2063,11 +2403,11 @@ const LOCATION_GROUPS = [
     "spot": "Craggy Reef",
     "spotZh": "嶙峋礁",
     "fish": [
+      "pacific-herring",
       "chinook-salmon",
-      "coho-salmon",
       "lingcod",
-      "masu-salmon",
-      "pacific-herring"
+      "coho-salmon",
+      "masu-salmon"
     ],
     "ice": false
   },
@@ -2080,11 +2420,11 @@ const LOCATION_GROUPS = [
     "spot": "Safety Cove",
     "spotZh": "安全湾",
     "fish": [
-      "american-shad",
       "atlantic-salmon",
       "chinook-salmon",
+      "steelhead-trout",
       "pink-salmon",
-      "steelhead-trout"
+      "american-shad"
     ],
     "ice": false
   },
@@ -2097,11 +2437,11 @@ const LOCATION_GROUPS = [
     "spot": "Divers Drop",
     "spotZh": "潜者渊",
     "fish": [
-      "dolly-varden",
-      "eulachon",
       "pacific-halibut",
+      "striped-bass",
       "sockeye-salmon",
-      "striped-bass"
+      "dolly-varden",
+      "eulachon"
     ],
     "ice": false
   },
@@ -2115,10 +2455,10 @@ const LOCATION_GROUPS = [
     "spotZh": "海豹滩",
     "fish": [
       "capelin",
-      "chum-salmon",
-      "dolly-varden",
+      "striped-bass",
       "greenland-halibut",
-      "striped-bass"
+      "chum-salmon",
+      "dolly-varden"
     ],
     "ice": false
   },
@@ -2131,15 +2471,15 @@ const LOCATION_GROUPS = [
     "spot": "Frostbite Flats",
     "spotZh": "霜噬台地",
     "fish": [
-      "ice-arctic-char",
-      "ice-channel-catfish",
-      "ice-lake-trout",
-      "ice-largemouth-bass",
-      "ice-muskie",
       "ice-northern-pike",
+      "ice-arctic-char",
+      "ice-muskie",
+      "ice-channel-catfish",
+      "ice-largemouth-bass",
       "ice-smallmouth-bass",
-      "ice-tiger-muskie",
+      "ice-lake-trout",
       "ice-walleye",
+      "ice-tiger-muskie",
       "ice-yellow-perch"
     ],
     "ice": true

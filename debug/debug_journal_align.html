@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Cast n Chill - Live Journal Align Debug</title>
+<style>
+@font-face{font-family:zpix;src:url(zpix.ttf) format("truetype")}
+*{box-sizing:border-box}
+body{margin:0;background:#17151f;color:#eadfbd;font-family:zpix,"Courier New",monospace;font-size:14px}
+button,input,textarea{font-family:inherit}
+.app{display:grid;grid-template-columns:1fr 420px;gap:16px;height:100vh;padding:16px}
+.frame-wrap{background:#201923;border:1px solid #52435b;overflow:hidden}
+iframe{width:100%;height:100%;border:0;background:#1a1a2e}
+.controls{overflow:auto;background:#211c28;border:1px solid #52435b;padding:12px}
+.controls h1{font-size:16px;font-weight:400;color:#f2c36d;margin:0 0 12px}
+.row{display:grid;grid-template-columns:120px 1fr 62px;gap:8px;align-items:center;margin-bottom:8px}
+.row label{font-size:12px;color:#d4c39b}
+.row input[type=range]{width:100%}
+.row input[type=number]{width:62px;background:#15121a;color:#f4e2bb;border:1px solid #5f5058;padding:4px}
+.actions{display:flex;gap:8px;margin:10px 0}
+.actions button{background:#4c3d3d;color:#f5dfaa;border:1px solid #80624e;padding:7px 10px;cursor:pointer}
+textarea{width:100%;height:170px;background:#15121a;color:#f4e2bb;border:1px solid #5f5058;padding:10px;font-size:12px;line-height:18px;resize:vertical}
+.hint{font-size:12px;line-height:18px;color:#c5b99d;margin:8px 0 10px}
+</style>
+</head>
+<body>
+<div class="app">
+  <main class="frame-wrap">
+    <iframe id="journalFrame" src="fish_journal.html"></iframe>
+  </main>
+  <aside class="controls">
+    <h1>真实页面对齐 Debug</h1>
+    <div id="rows"></div>
+    <div class="actions">
+      <button id="resetBtn" type="button">重置</button>
+      <button id="copyBtn" type="button">复制参数</button>
+    </div>
+    <div class="hint">这里直接加载真实 <code>fish_journal.html</code> 并注入 CSS，所以预览结果和正式页面一致。先在左侧真实页面点一条鱼，再调参数。</div>
+    <textarea id="output" spellcheck="false"></textarea>
+  </aside>
+</div>
+<script>
+var values={
+  nameTop:1,nameWidth:96,nameHeight:10,nameFont:7,nameLine:8,
+  rarityLeft:80,rarityTop:63,rarityWidth:44,rarityHeight:9,rarityFont:6,rarityLine:7,
+  sizeLeft:3,sizeTop:64,sizeGap:1,bigTop:15,bigWidth:96,bigHeight:56
+};
+var defaults=JSON.parse(JSON.stringify(values));
+var ranges={
+  nameTop:[-4,8],nameWidth:[70,120],nameHeight:[6,16],nameFont:[4,10],nameLine:[5,12],
+  rarityLeft:[68,94],rarityTop:[58,70],rarityWidth:[28,56],rarityHeight:[5,14],rarityFont:[4,9],rarityLine:[5,11],
+  sizeLeft:[-2,14],sizeTop:[58,70],sizeGap:[0,5],bigTop:[10,22],bigWidth:[80,112],bigHeight:[48,64]
+};
+var labels={
+  nameTop:"鱼名 top",nameWidth:"鱼名 width",nameHeight:"鱼名 height",nameFont:"鱼名字号",nameLine:"鱼名行高",
+  rarityLeft:"稀有度 left",rarityTop:"稀有度 top",rarityWidth:"稀有度 width",rarityHeight:"稀有度 height",rarityFont:"稀有度字号",rarityLine:"稀有度行高",
+  sizeLeft:"尺寸图标 left",sizeTop:"尺寸图标 top",sizeGap:"尺寸图标 gap",bigTop:"鱼图 top",bigWidth:"鱼图 width",bigHeight:"鱼图 height"
+};
+function cssText(){
+  return [
+    ".fish-name{top:"+values.nameTop+"px;width:"+values.nameWidth+"px;height:"+values.nameHeight+"px;font-size:"+values.nameFont+"px;line-height:"+values.nameLine+"px}",
+    ".big-fish-img{top:"+values.bigTop+"px;width:"+values.bigWidth+"px;height:"+values.bigHeight+"px}",
+    ".rarity-text{left:"+values.rarityLeft+"px;top:"+values.rarityTop+"px;width:"+values.rarityWidth+"px;height:"+values.rarityHeight+"px;font-size:"+values.rarityFont+"px;line-height:"+values.rarityLine+"px}",
+    ".fish-size-icons{left:"+values.sizeLeft+"px;top:"+values.sizeTop+"px;gap:"+values.sizeGap+"px}"
+  ].join("\n");
+}
+function inject(){
+  var frame=document.getElementById("journalFrame");
+  var doc=frame.contentDocument;
+  if(!doc)return;
+  var style=doc.getElementById("alignDebugStyle");
+  if(!style){
+    style=doc.createElement("style");
+    style.id="alignDebugStyle";
+    doc.head.appendChild(style);
+  }
+  style.textContent=cssText();
+  document.getElementById("output").value=cssText();
+}
+function renderRows(){
+  var html="";
+  for(var key in values){
+    html+='<div class="row"><label for="'+key+'">'+labels[key]+'</label><input id="'+key+'" data-key="'+key+'" type="range" min="'+ranges[key][0]+'" max="'+ranges[key][1]+'" step="0.1" value="'+values[key]+'"><input data-key="'+key+'" type="number" step="0.1" value="'+values[key]+'"></div>';
+  }
+  document.getElementById("rows").innerHTML=html;
+  var inputs=document.querySelectorAll("[data-key]");
+  for(var i=0;i<inputs.length;i++){
+    inputs[i].addEventListener("input",function(){
+      values[this.getAttribute("data-key")]=Number(this.value);
+      syncInputs();
+      inject();
+    });
+  }
+}
+function syncInputs(){
+  var inputs=document.querySelectorAll("[data-key]");
+  for(var i=0;i<inputs.length;i++)inputs[i].value=values[inputs[i].getAttribute("data-key")];
+}
+document.getElementById("journalFrame").addEventListener("load",function(){setTimeout(inject,80)});
+document.getElementById("resetBtn").addEventListener("click",function(){values=JSON.parse(JSON.stringify(defaults));syncInputs();inject()});
+document.getElementById("copyBtn").addEventListener("click",function(){var out=document.getElementById("output");out.focus();out.select();navigator.clipboard.writeText(out.value).catch(function(){document.execCommand("copy")})});
+renderRows();
+inject();
+</script>
+</body>
+</html>
