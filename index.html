@@ -40,18 +40,24 @@ body.ready{visibility:visible}
 .detail-row span:last-child{flex:1;min-width:0}
 .time-value{display:flex;align-items:center;gap:2px;min-height:8px;line-height:8px}
 .time-value img{width:7px;height:7px;object-fit:contain;image-rendering:pixelated}
-.right-page{position:absolute;left:258px;top:124px;width:192px;height:184px}
+.right-page{position:absolute;left:258px;top:124px;width:244px;height:184px}
 .sort-label{position:absolute;right:32px;top:0;font-size:7px;color:#6b5a3e}
 .sort-btn{position:absolute;right:8px;top:0;cursor:pointer;font-size:7px;color:#3b2f1a;background:#9a775f;padding:1px 3px}
-.scroll-area{position:absolute;left:9px;top:10px;right:14px;bottom:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.scroll-area{position:absolute;left:9px;top:10px;right:84px;bottom:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
 .scroll-area::-webkit-scrollbar{width:0;height:0}
-.book-scrollbar{position:absolute;top:15px;right:4px;width:8px;bottom:6px;z-index:4;display:none}
+.book-scrollbar{position:absolute;top:15px;right:72px;width:8px;bottom:6px;z-index:4;display:none}
 .book-scrollbar.visible{display:block}
 .book-scrollbar-track{position:absolute;top:0;left:3px;width:2px;height:100%;background:#9c8761}
 .book-scrollbar-thumb{position:absolute;left:0;width:8px;min-height:24px;background:#8c7651;border:1px solid #6f5a3f;cursor:pointer}
 .book-scrollbar-thumb:before,.book-scrollbar-thumb:after{content:"";position:absolute;left:1px;right:1px;height:1px;background:#b7a57d}
 .book-scrollbar-thumb:before{top:3px}
 .book-scrollbar-thumb:after{bottom:3px}
+.license-nav{position:absolute;left:184px;top:15px;width:58px;height:163px;z-index:20;display:flex;flex-direction:column;gap:3px;pointer-events:auto}
+.license-nav.hidden{display:none}
+.license-tab{position:relative;z-index:21;width:58px;height:15px;background:rgba(35,23,16,.68);border:1px solid rgba(116,85,48,.7);cursor:pointer;padding:0;image-rendering:pixelated;opacity:.78;display:flex;align-items:center;gap:2px;text-align:left;font-family:inherit;overflow:hidden;pointer-events:auto}
+.license-tab img{width:24px;height:14px;object-fit:contain;image-rendering:pixelated;pointer-events:none;flex:0 0 24px}
+.license-tab .license-name{width:30px;color:#f6df9a;font-size:4px;line-height:5px;pointer-events:none;text-shadow:1px 0 0 #21130d,-1px 0 0 #21130d,0 1px 0 #21130d,0 -1px 0 #21130d;word-break:normal;overflow:hidden}
+.license-tab.active{opacity:1;filter:brightness(1.18) drop-shadow(0 0 1px #f2d084)}
 .fish-group{margin-bottom:5px}
 .fish-group-header{color:#a85f35;font-size:6px;margin-bottom:2px;padding-left:2px;white-space:nowrap;display:flex;align-items:center;gap:4px}
 .fish-group-header .loc-icon{width:8px;height:8px;object-fit:contain;image-rendering:pixelated}
@@ -62,6 +68,7 @@ body.ready{visibility:visible}
 .fish-thumb .thumb-img{position:absolute;top:1.96px;left:1.96px;width:19.6px;height:19.6px;object-fit:contain;image-rendering:pixelated;z-index:1}
 .fish-thumb .thumb-selector{display:none;position:absolute;top:-0.98px;left:-0.98px;width:26.46px;height:23.52px;z-index:2;pointer-events:none}
 .fish-thumb.selected .thumb-selector{display:block}
+.scroll-spacer{height:120px}
 .sort-popup-bg{display:none;position:absolute;top:0;left:0;width:516px;height:432px;background:rgba(0,0,0,0.3);z-index:50;transform:scale(4);transform-origin:top left}
 .sort-popup{position:absolute;top:50%;left:60%;transform:translate(-60%,-70%);z-index:51}
 .sort-popup>img{width:94px;height:105px}
@@ -111,6 +118,7 @@ body.ready{visibility:visible}
           <div class="book-scrollbar-track"></div>
           <div class="book-scrollbar-thumb" id="bookScrollbarThumb"></div>
         </div>
+        <div class="license-nav" id="licenseNav"></div>
       </div>
     </div>
   </div>
@@ -128,7 +136,7 @@ body.ready{visibility:visible}
 </div>
 <script src="fishdata.js"></script>
 <script>
-var lang="zh",selectedEntry=null,sortMode="game";
+var lang="zh",selectedEntry=null,sortMode="game",activeLicenseArea="",lockLicenseArea=false;
 var LABEL_TEXT={zh:{spot:"钓点:",area:"区域:",time:"获取奖杯\n推荐时间",size:"尺寸:",length:"长度:",weight:"重量:"},en:{spot:"Spot:",area:"Area:",time:"Trophy\nbest time",size:"Size:",length:"Length:",weight:"Weight:"}};
 var SORT_TEXT={zh:{label:"排序依据",game:"钓场",name:"名称",rarity:"稀有度",all:"全部鱼类"},en:{label:"Sort by",game:"Spot",name:"Name",rarity:"Rarity",all:"All Fish"}};
 var RARITY_ORDER={Common:0,Uncommon:1,Rare:2,Epic:3,Legendary:4};
@@ -154,6 +162,22 @@ function groupTitle(group){
   var spot=lang==="zh"?group.spotZh:group.spot;
   return "<img class=\"loc-icon\" src=\"sprites/book_icon_foundlocation.png\" alt=\"\"><span>"+area+"</span><span class=\"spot\">"+spot+"</span>";
 }
+function groupShortLabel(group){
+  var id=String(group.id||"");
+  var m=id.match(/^(river|lake|ocean|ice)(\d+)-spot(\d+)$/);
+  if(m)return m[1].charAt(0).toUpperCase()+m[2]+"-"+m[3];
+  if(id==="cabin1")return "C1";
+  return id.slice(0,3).toUpperCase();
+}
+var LICENSE_ICON_BY_AREA={
+  river1:"licenses/goldenfork-river.png",
+  river2:"licenses/grizzlyridge-river.png",
+  lake1:"licenses/fawnmirror-lake.png",
+  lake2:"licenses/autumnwood-lake.png",
+  ocean1:"licenses/icewater-sea.png",
+  ocean2:"licenses/old-wreck-bay.png",
+  ice1:"licenses/lake-hunkerdown.png"
+};
 function renderTimeValue(fish){
   var icons=fish.timeIcons&&fish.timeIcons.length?fish.timeIcons:[];
   var text=lang==="zh"?(fish.timeZh||"-"):(fish.time||"-");
@@ -182,10 +206,10 @@ function toggleLang(){
   updateSortText();
   if(selectedEntry)selectFish(selectedEntry.fish,selectedEntry.group,false);
   else document.getElementById("fishName").textContent=lang==="zh"?"请选择一条鱼":"Select a fish";
-  renderGrid();
+  renderGrid(true);
 }
 function toggleSort(){var p=document.getElementById("sortPopupBg");p.style.display=p.style.display==="block"?"none":"block"}
-function sortBy(m){sortMode=m;updateSortText();toggleSort();renderGrid()}
+function sortBy(m){sortMode=m;updateSortText();toggleSort();renderGrid(true)}
 function selectFish(fish,group,rerender){
   selectedEntry={fish:fish,group:group};
   document.getElementById("fishName").textContent=lang==="zh"?fish.zh:fish.en;
@@ -245,6 +269,83 @@ function updateBookScrollbar(){
   var y=Math.round((track-h)*(area.scrollTop/max));
   thumb.style.height=h+"px";
   thumb.style.top=y+"px";
+  updateLicenseNavActive();
+}
+function renderLicenseNav(){
+  var nav=document.getElementById("licenseNav");
+  if(!nav)return;
+  if(sortMode!=="game"){nav.classList.add("hidden");nav.innerHTML="";return}
+  nav.classList.remove("hidden");
+  var html="",seen={};
+  for(var i=0;i<LOCATION_GROUPS.length;i++){
+    var group=LOCATION_GROUPS[i];
+    if(seen[group.areaId]||!LICENSE_ICON_BY_AREA[group.areaId])continue;
+    seen[group.areaId]=true;
+    var areaName=lang==="zh"?group.areaZh:group.area;
+    html+='<button class="license-tab" type="button" data-area="'+esc(group.areaId)+'" title="'+esc(areaName)+'"><img src="sprites/'+LICENSE_ICON_BY_AREA[group.areaId]+'" alt=""><span class="license-name">'+esc(areaName)+'</span></button>';
+  }
+  nav.innerHTML=html;
+  var tabs=nav.querySelectorAll(".license-tab");
+  for(var j=0;j<tabs.length;j++){
+    tabs[j].addEventListener("click",function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      activateLicenseTab(this);
+    });
+  }
+  updateLicenseNavActive();
+}
+function activateLicenseTab(tab){
+  if(!tab)return;
+  activeLicenseArea=tab.getAttribute("data-area");
+  lockLicenseArea=true;
+  updateLicenseNavActive();
+  scrollToArea(activeLicenseArea);
+  activeLicenseArea=tab.getAttribute("data-area");
+  updateLicenseNavActive();
+  setTimeout(function(){lockLicenseArea=false;updateLicenseNavActive()},220);
+}
+function scrollToArea(areaId){
+  var area=document.getElementById("fishGrid");
+  var target=area&&area.querySelector('.fish-group[data-area="'+areaId+'"]');
+  if(areaId==="ocean2")target=area&&area.querySelector('.fish-group[data-group="ocean2-spot1"]');
+  if(areaId==="ice1")target=area&&area.querySelector('.fish-group[data-group="ice1-spot1"]');
+  if(!area||!target)return;
+  scrollToElementInGrid(target);
+}
+function scrollToGroup(groupId){
+  var area=document.getElementById("fishGrid");
+  var target=area&&area.querySelector('.fish-group[data-group="'+groupId+'"]');
+  if(!area||!target)return;
+  scrollToElementInGrid(target);
+}
+function scrollToElementInGrid(target){
+  var area=document.getElementById("fishGrid");
+  if(!area||!target)return;
+  var top=target.offsetTop;
+  var max=area.scrollHeight-area.clientHeight;
+  area.scrollTop=Math.max(0,Math.min(max,top));
+  updateBookScrollbar();
+  updateLicenseNavActive();
+}
+function updateLicenseNavActive(){
+  var area=document.getElementById("fishGrid");
+  var nav=document.getElementById("licenseNav");
+  if(!area||!nav||sortMode!=="game")return;
+  var groups=area.querySelectorAll(".fish-group[data-group]");
+  var current="",currentArea="";
+  if(!lockLicenseArea&&area.scrollTop+area.clientHeight>=area.scrollHeight-2&&groups.length){
+    current=groups[groups.length-1].getAttribute("data-group");
+  }else{
+    for(var i=0;i<groups.length;i++){
+      if(groups[i].offsetTop<=area.scrollTop+2)current=groups[i].getAttribute("data-group");
+      else break;
+    }
+  }
+  for(var k=0;k<LOCATION_GROUPS.length;k++){if(LOCATION_GROUPS[k].id===current){currentArea=LOCATION_GROUPS[k].areaId;break}}
+  if(currentArea&&!lockLicenseArea)activeLicenseArea=currentArea;
+  var tabs=nav.querySelectorAll(".license-tab");
+  for(var j=0;j<tabs.length;j++)tabs[j].classList.toggle("active",tabs[j].getAttribute("data-area")===activeLicenseArea);
 }
 function initBookScrollbar(){
   var area=document.getElementById("fishGrid");
@@ -265,6 +366,7 @@ function initBookScrollbar(){
   });
   bar.addEventListener("mousedown",function(e){
     if(e.target===thumb)return;
+    if(e.target.closest&&e.target.closest(".license-tab"))return;
     var rect=bar.getBoundingClientRect();
     var thumbH=thumb.offsetHeight;
     var y=e.clientY-rect.top-thumbH/2;
@@ -288,7 +390,7 @@ function initBookScrollbar(){
   }
   updateBookScrollbar();
 }
-function renderGrid(){
+function renderGrid(resetScroll){
   var g=document.getElementById("fishGrid");
   if(typeof FISH_DATA==="undefined"||typeof LOCATION_GROUPS==="undefined"||!FISH_DATA.length){g.innerHTML="Loading...";return}
   var entries=sortMode==="game"?locationEntries():singleFishEntries();
@@ -305,7 +407,7 @@ function renderGrid(){
     if(e.groupKey!==current){
       if(current)html+="</div></div>";
       current=e.groupKey;
-      html+="<div class=\"fish-group\"><div class=\"fish-group-header\">"+e.groupName+"</div><div class=\"fish-grid\">";
+      html+="<div class=\"fish-group\" data-group=\""+esc(e.groupKey)+"\" data-area=\""+esc(group?group.areaId:"")+"\"><div class=\"fish-group-header\">"+e.groupName+"</div><div class=\"fish-grid\">";
     }
     var selected=selectedEntry&&selectedEntry.fish.id===fish.id&&selectedEntry.group&&group&&selectedEntry.group.id===group.id;
     html+="<div class=\"fish-thumb"+(selected?" selected":"")+"\" data-fish=\""+esc(fish.id)+"\" data-group=\""+esc(group?group.id:"")+"\">";
@@ -315,8 +417,11 @@ function renderGrid(){
     html+="</div>";
   }
   if(current)html+="</div></div>";
+  if(sortMode==="game")html+="<div class=\"scroll-spacer\" aria-hidden=\"true\"></div>";
+  var previousScroll=g.scrollTop;
   g.innerHTML=html;
-  g.scrollTop=0;
+  g.scrollTop=resetScroll?0:previousScroll;
+  renderLicenseNav();
   updateBookScrollbar();
   var nodes=g.querySelectorAll(".fish-thumb");
   for(var j=0;j<nodes.length;j++){
