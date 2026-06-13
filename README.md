@@ -1,4 +1,7 @@
 # Cast n Chill Fish Journal
+快速进入：
+Kinotern.github.io/CnCFishJournal
+
 
 这是一个基于《Cast n Chill》本地 Unity 资源整理出来的鱼类图鉴网页。页面尽量复刻游戏内图鉴的像素书本界面，并使用真实鱼类数据、地点顺序、鱼类缩略图、鱼类大图、钓竿图标、钓饵图标和出现时间图标。
 
